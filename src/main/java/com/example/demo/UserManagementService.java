@@ -33,28 +33,33 @@ public class UserManagementService {
 	@Autowired
 	SpringBootJdbcController springBootJdbcController;
 	@Autowired
-    private RestTemplate restTemplate; 
-   // private static final String USER_MGMT_SERVICE_BASE_URL = "http://localhost:8082/api/user";
+	private RestTemplate restTemplate;
+	// private static final String USER_MGMT_SERVICE_BASE_URL =
+	// "http://localhost:8082/api/user";
 
 	@Value("${USER_MGMT_SERVICE_BASE_URL}")
 	private String USER_MGMT_SERVICE_BASE_URL;
-	
+
 	public Page<Employee> findPaginatedEmp(Pageable pageable) {
 
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		List<Employee> books = new ArrayList<Employee>();
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL+"/emp", String.class);
-        System.err.println("hello");
-        List<Employee> books = restTemplate
-        		  .getForObject(USER_MGMT_SERVICE_BASE_URL+"/emp", List.class);
-        
+		try {
+
+			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/emp",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/emp", List.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int startItem = currentPage * pageSize;
@@ -72,24 +77,25 @@ public class UserManagementService {
 		return bookPage;
 
 	}
-	
-	
+
 	public Page<Admin> findPaginatedAdmin(Pageable pageable) {
 
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		List<Admin> books = new ArrayList<>();
+		try {
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL+"/admin", String.class);
-        System.err.println("hello");
-        List<Admin> books = restTemplate
-        		  .getForObject(USER_MGMT_SERVICE_BASE_URL+"/admin", List.class);
-        
+			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/admin",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/admin", List.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int startItem = currentPage * pageSize;
@@ -107,96 +113,122 @@ public class UserManagementService {
 		return bookPage;
 
 	}
-	
+
 	public String addEmp(Employee empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Employee> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/add-emp", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/add-emp", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
-	
 
 	public String removeEmp(Employee empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Employee> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/remove-emp", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/remove-emp", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
 
 	public String addAdmin(Admin empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Admin> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/add-admin", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/add-admin", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
-	
+
 	public String addRole(Roles empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Roles> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/add-role", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/add-role", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
+
 	public String addRegion(Region empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Region> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/add-region", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/add-region", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
-	
+
 	public String removeAdmin(Admin empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Admin> request = new HttpEntity<>(empModel, headers);
+		String response = "";
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL+"/remove-admin", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(USER_MGMT_SERVICE_BASE_URL + "/remove-admin", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
 
-
 	public Page<Regions> findPaginatedRegion(Pageable pageable) {
 
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL+"/region", String.class);
-        System.err.println("hello");
-        List<Regions> books = restTemplate
-        		  .getForObject(USER_MGMT_SERVICE_BASE_URL+"/region", List.class);
-        
+		List<Regions> books = new ArrayList<>();
+		try {
+
+			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/region",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/region", List.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int startItem = currentPage * pageSize;
@@ -215,23 +247,23 @@ public class UserManagementService {
 
 	}
 
-
 	public Page<Roles> findPaginatedRoles(Pageable pageable) {
 
-        
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		List<Roles> books = new ArrayList<>();
+		try {
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL+"/role", String.class);
-        System.err.println("hello");
-        List<Roles> books = restTemplate
-        		  .getForObject(USER_MGMT_SERVICE_BASE_URL+"/role", List.class);
-        
+			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/role",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/role", List.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int startItem = currentPage * pageSize;
@@ -250,5 +282,4 @@ public class UserManagementService {
 
 	}
 
-	
 }
