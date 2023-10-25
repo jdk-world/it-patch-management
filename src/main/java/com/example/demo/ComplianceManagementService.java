@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -36,36 +37,40 @@ public class ComplianceManagementService {
 	@Autowired
 	SpringBootJdbcController springBootJdbcController;
 	@Autowired
-    private RestTemplate restTemplate; 
-   // private static final String USER_MGMT_SERVICE_BASE_URL = "http://localhost:8082/api/user";
+	private RestTemplate restTemplate;
+	// private static final String USER_MGMT_SERVICE_BASE_URL =
+	// "http://localhost:8082/api/user";
 
 	@Value("${COMPLIANCE_MGMT_SERVICE_BASE_URL}")
 	private String COMPLIANCE_MGMT_SERVICE_BASE_URL;
-	
 
-	
 	public Page<Employee> findPaginatedComplianceReport(Pageable pageable, String[] filterArr) {
 		// List<Book> books = BookUtils.buildBooks();
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
 		HttpEntity<String[]> request = new HttpEntity<>(filterArr, headers);
+		String response = "";
+		List<Employee> books = new ArrayList<Employee>();
+		try {
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		//String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/create-patch", request, String.class);	
-		String response = restTemplate.postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/filter", request, String.class);	
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			// String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL +
+			// "/create-patch", request, String.class);
+			response = restTemplate.postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/filter", request, String.class);
 
+			System.err.println("hello");
+			books = restTemplate.postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/filter", request, List.class);
 
-        System.err.println("hello");
-        List<Employee> books = restTemplate
-        		  .postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL+"/filter", request, List.class);
-        
-		//List<Employee> books = springBootJdbcController.findAllComplianceReports(filterArr);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		// List<Employee> books =
+		// springBootJdbcController.findAllComplianceReports(filterArr);
 
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
@@ -84,44 +89,49 @@ public class ComplianceManagementService {
 		return bookPage;
 
 	}
-	
+
 	public List<Employee> findAllComplianceReports(String[] filterArr) {
 		// List<Book> books = BookUtils.buildBooks();
-		
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(COMPLIANCE_MGMT_SERVICE_BASE_URL+"/dashboard", String.class);
-        System.err.println("hello");
-        List<Employee> books = restTemplate
-        		  .getForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL+"/dashboard", List.class);
-        
-		//List<Employee> books = springBootJdbcController.findAllComplianceReports(filterArr);
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		String responseBody = "";
+		HttpStatus httpStatus = HttpStatus.OK; // You can use a different status code as needed
+		ResponseEntity<String> response = new ResponseEntity<>(responseBody, httpStatus);
 
-        String jsonResponse = response.getBody();
+		try {
 
-     // Create an ObjectMapper
-     ObjectMapper objectMapper = new ObjectMapper();
-     List<Employee> employees = new ArrayList<Employee>();
-     
-     try {
-         // Use the ObjectMapper to parse the JSON array into a list of Employee objects
-          employees = objectMapper.readValue(jsonResponse, new TypeReference<List<Employee>>() {});
-     } catch (Exception e) {
-         // Handle any parsing exceptions
-     }
-     
-        
+			response = restTemplate.getForEntity(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/dashboard", String.class);
+			System.err.println("hello");
+			List<Employee> books = restTemplate.getForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/dashboard",
+					List.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		// List<Employee> books =
+		// springBootJdbcController.findAllComplianceReports(filterArr);
+
+		String jsonResponse = response.getBody();
+
+		// Create an ObjectMapper
+		ObjectMapper objectMapper = new ObjectMapper();
+		List<Employee> employees = new ArrayList<Employee>();
+
+		try {
+			// Use the ObjectMapper to parse the JSON array into a list of Employee objects
+			employees = objectMapper.readValue(jsonResponse, new TypeReference<List<Employee>>() {
+			});
+		} catch (Exception e) {
+			// Handle any parsing exceptions
+		}
+
 		return employees;
 
 	}
-	
-	
-	
-	
+
 }
