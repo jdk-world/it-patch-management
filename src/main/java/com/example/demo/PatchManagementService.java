@@ -33,38 +33,43 @@ public class PatchManagementService {
 	@Autowired
 	SpringBootJdbcController springBootJdbcController;
 	@Autowired
-    private RestTemplate restTemplate; 
+	private RestTemplate restTemplate;
 
-    //private static final String PATCH_MGMT_SERVICE_BASE_URL = "http://localhost:8081/api/patch";
-
+	// private static final String PATCH_MGMT_SERVICE_BASE_URL =
+	// "http://localhost:8081/api/patch";
 
 	@Value("${PATCH_MGMT_SERVICE_BASE_URL}")
 	private String PATCH_MGMT_SERVICE_BASE_URL;
-    
+
 	public Page<Patch> findPaginatedCatelog(Pageable pageable) {
 
-        
 		// List<Book> books = BookUtils.buildBooks();
-		//List<Patch> books = springBootJdbcController.findAllSlots(filterArr);
+		// List<Patch> books = springBootJdbcController.findAllSlots(filterArr);
 
-		//List<Patch> books = (List<Patch>) restTemplate.getForObject("http://localhost:8081/api/patchcatelog", Patch.class);
-		//HttpHeaders headers = new HttpHeaders();
-		//HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+		// List<Patch> books = (List<Patch>)
+		// restTemplate.getForObject("http://localhost:8081/api/patchcatelog",
+		// Patch.class);
+		// HttpHeaders headers = new HttpHeaders();
+		// HttpEntity<?> requestEntity = new HttpEntity<>(headers);
 
-        // Create an HTTP request headers object.
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+		// Create an HTTP request headers object.
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
 
-        // Create an HTTP request entity object.
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		List<Patch> books = new ArrayList<Patch>();
+		try {
 
-        ResponseEntity<String> response
-          = restTemplate.getForEntity(PATCH_MGMT_SERVICE_BASE_URL + "/catelog", String.class);
-        System.err.println("hello");
-        List<Patch> books = restTemplate
-        		  .getForObject(PATCH_MGMT_SERVICE_BASE_URL+ "/catelog", List.class);
-        
+			HttpEntity<String> response = restTemplate.getForEntity(PATCH_MGMT_SERVICE_BASE_URL + "/catelog",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(PATCH_MGMT_SERVICE_BASE_URL + "/catelog", List.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		int pageSize = pageable.getPageSize();
 		int currentPage = pageable.getPageNumber();
 		int startItem = currentPage * pageSize;
@@ -82,36 +87,28 @@ public class PatchManagementService {
 		return bookPage;
 
 	}
-	
-	
-
-
-
-
-
-
 
 	public String createPatch(Patch patchModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Patch> request = new HttpEntity<>(patchModel, headers);
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/create-patch", request, String.class);	
+		// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+		String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/create-patch", request,
+				String.class);
 		return response;
 	}
 
 	public String removePatch(Patch empModel) {
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Patch> request = new HttpEntity<>(empModel, headers);
 
-		
-		//HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL+"/remove-patch", request, String.class);	
+		// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+		String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/remove-patch", request,
+				String.class);
 		return response;
 	}
 }
