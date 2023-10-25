@@ -1,0 +1,54 @@
+apiVersion: v1
+
+kind: Service 
+
+metadata:
+  name: it-patch-management
+  labels:
+    app: it-patch-management-svc-label
+
+spec:
+  ports:
+  - port: 8082
+    name: http
+
+  selector:
+    app: it-patch-management-v1-v2
+
+  type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+  name: it-patch-management-deployment-v1
+  labels:
+    app: it-patch-management-dep-label
+
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: it-patch-management-v1-v2
+
+  template: # template for the pods
+    metadata:
+      labels:
+        app: it-patch-management-v1-v2
+        version: v1
+
+    spec:
+      containers:
+      - name: it-patch-management-ver1
+        image: docker.io/saurabh2204/it-patch-management:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8899
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m        
