@@ -9,7 +9,7 @@ metadata:
 
 spec:
   ports:
-  - port: 8082
+  - port: 8080
     name: http
 
   selector:
