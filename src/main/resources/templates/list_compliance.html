@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<meta charset="ISO-8859-1">
+<title>Home</title>
+<script type="text/javascript"></script>
+
+<style>
+
+.non-compliant-text {
+    color: red;
+}
+
+.compliant-text {
+    color: green;
+}
+
+  .menu-link1 {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+  .pagination-container {
+    position: fixed; /* Fixed position to keep it at the bottom */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white; /* Set the background color as needed */
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc; /* Add a border if needed */
+  }
+  
+  .pagination {
+    display: inline-block;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+
+        .tabs {
+            display: flex;
+            margin-top: 20px;
+            width: 20%;
+            
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #3498db;
+            background-color: #f7f7f7;
+           white-space: nowrap; /* Prevent line breaks */
+            
+        }
+
+        .tabContent {
+            display: none;
+        }
+
+/* Table Styling */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+/* Header Row Styling */
+.styled-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+/* Alternate Row Colors */
+.styled-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover Effect */
+.styled-table tbody tr:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.menu-item {
+    margin-left: 20px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.menu-link:hover {
+    background-color: #2980b9;
+}
+
+
+ .menu-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .menu-item {
+            margin-left: 20px;
+        }
+
+        .menu-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-link:hover {
+            background-color: #2980b9;
+        }
+    
+#listOfAllSlots {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	border: 1px solid #ddd;
+}
+
+/* Style table header */
+#listOfAllSlots th {
+	background-color: #3498db;
+	color: white;
+	text-align: center;
+	padding: 12px;
+	font-weight: bold;
+	border: 1px solid #ddd;
+}
+
+/* Style table rows */
+#listOfAllSlots td {
+	padding: 10px;
+	border: 1px solid #ddd;
+}
+
+/* Alternate row background color */
+#listOfAllSlots tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+/* Style the buttons in each row */
+#listOfAllSlots button {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+#listOfAllSlots button:hover {
+	background-color: #2574a9;
+}
+
+/* Disable button style */
+#listOfAllSlots button:disabled {
+	background-color: gray;
+	cursor: not-allowed;
+}
+
+/* Style the message paragraph */
+#listOfAllSlots p {
+	margin: 0;
+	font-weight: bold;
+	color: red;
+}
+
+.form-button-container {
+	display: flex; /* Use flexbox layout */
+	justify-content: space-between; /* Space evenly between the buttons */
+	align-items: center; /* Center vertically */
+	margin-top: 10px;
+	/* Add some spacing between the buttons and other form elements if needed */
+}
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.button-form {
+	display: inline-block;
+}
+
+.easy-connect-container {
+	text-align: center;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+}
+
+/* Style for the icon image */
+.icon {
+	width: 200px;
+	height: 45px;
+}
+
+.center-box {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 10vh;
+}
+
+.box {
+	border: 2px solid #3498db; /* Border color */
+	border-radius: 10px; /* Rounded corners */
+	padding: 20px;
+	background-color: #f2f2f2; /* Background color */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+	text-align: center;
+}
+
+/* Style for the "Easy Connect" title */
+.title {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+/* Style for the icon image */
+.icon {
+	width: 200px;
+	height: 45px;
+}
+
+.center-icon {
+	text-align: center;
+}
+
+.center-icon img {
+	display: block;
+	margin: 0 auto;
+}
+
+button {
+	background-color: #3498db;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+	font-weight: bold; /* Make the text bold */
+}
+
+/* Style the "Book" button when disabled */
+button:disabled {
+	background-color: gray;
+	cursor: not-allowed;
+}
+
+.pagination {
+	display: inline-block;
+}
+
+.red {
+	color: #0024ff
+}
+
+.container {
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 5px 5px;
+	text-decoration: none;
+	align-items: center;
+	display: flex;
+}
+
+.pagination a.active {
+	background-color: gray;
+	color: white;
+	border-radius: 2px;
+	align-items: center;
+	display: flex;
+}
+
+#menu {
+	font-family: tahoma;
+	margin-top: 10px;
+	margin-right: 10px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+.loader {
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 70px;
+	height: 70px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+	position: fixed; /* or absolute */
+	top: 60%;
+	left: 40%;
+}
+
+/* Safari */
+@
+-webkit-keyframes spin { 0% {
+	-webkit-transform: rotate(0deg);
+}
+
+100
+%
+{
+-webkit-transform
+:
+rotate(
+360deg
+);
+}
+}
+@
+keyframes spin { 0% {
+	transform: rotate(0deg);
+}
+
+100
+%
+{
+transform
+:
+rotate(
+360deg
+);
+}
+}
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+</style>
+
+<script type="text/javascript">
+
+function setValue(source) {
+    //document.getElementById("helloid").style.display = ""; 
+    document.getElementById("loaderid").className  = "loader"; 
+}
+
+function clearForm() {
+    document.getElementById("clear_usrform").submit(); // Submit the second form
+}
+
+function filterForm() {
+    document.getElementById("filter_usrform").submit(); // Submit the form
+}
+
+</script>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jQuery UI Dialog - Default functionality</title>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#dialog" ).dialog();
+  } );
+  </script>
+
+
+<script
+	src="https://apis.google.com/js/platform.js?onload=onLoadCallback"
+	async defer></script>
+</head>
+<body>
+
+
+
+
+
+
+
+    
+    <div class="container">
+<a th:href="@{/}">
+    <img class="icon" th:src="@{/EasyConnect.jpg}" alt="Easy Connect">
+</a>
+       
+  
+        <ul class="menu">
+
+            <li class="menu-item">
+                <a th:href="@{/}" class="menu-link">Home</a>
+            </li>        
+                      
+            
+        </ul>
+    </div>
+    
+	<br />
+
+<div class="tabs">
+    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/compliance-svc} + '\''">Compliance Report</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/compliance-svc/dashboard} + '\''">Dashboard</div>
+</div>
+
+
+	<div class="box">
+		<form th:action="@{/compliance-svc/filter}" id="filter_usrform" method="POST">
+
+			<table id="filterSlots">
+				<thead>
+					<tr>
+					<!-- 	<th>Completion Date</th>
+						<th>Compliance Date</th>  -->
+						<th>Region</th>
+						<th>Patch Name</th>
+						<th>Compliant Status</th>
+						<th>Emp Id or Name</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<!-- <td><input type="datetime-local" id="filter_release_date"
+							name="filter_release_date" th:value="${filter_release_date}">
+						</td>
+						<td><input type="datetime-local" id="filter_slot_end"
+							name="filter_compliance_date" th:value="${filter_compliance_date}"></td>
+						<td> -->
+							<!--	  <input type="text" id="time_zone"  name="time_zone" value=""> -->
+							<!-- <select class="form-control" id="time_zone" name="time_zone">
+								<option th:each="option : ${options}" th:value="${option}"
+									th:text="${option}"></option>
+						</select>  -->
+						<td>
+							<select class="form-control" id="region" name="region">							
+								<option th:each="region : ${regions}" th:value="${region}"
+									th:text="${region}"></option>
+						</select>
+						</td>
+
+						<td>
+							<select class="form-control" id="patch" name="patch">
+								<option th:each="patch : ${patches}" th:value="${patch}"
+									th:text="${patch}"></option>
+							</select>
+						</td>
+
+
+						<td>
+							<select class="form-control" id="compliant" name="compliant">
+								<option th:each="compliant : ${compliantOptions}" th:value="${compliant}"
+									th:text="${compliant}"></option>
+							</select>
+						</td>
+
+
+<td>				
+            <input type="text" id="roll_no_name" name="roll_no_name" th:value="${filter_roll_no_emp_name}" class="narrow-input"><br>
+            
+</td>				
+												
+						
+
+					</tr>
+				</tbody>
+			</table>
+
+			<button type="button" onclick="filterForm()">Filter</button>
+
+			<button type="button" onclick="clearForm()">Clear</button>
+			<!-- Button to clear the second form -->
+
+		</form>
+
+		<form th:action="@{/compliance-svc/user-clear}" id="clear_usrform" method="GET"></form>
+	</div>
+
+
+	<!-- <center><img src="Patch_icon.png" alt="Patch Management"  width="300" height="200" align="middle">
+</center> -->
+	<br />
+<table id="listOfAllComplianceReports" class="styled-table">
+    <thead>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Region</th>
+            <th>Patch ID</th>
+            <th>Compliance Status</th>
+            <th>Completion Date</th>
+            <th>Employee Email List</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="book, iStat : ${bookPage.content}"
+            th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
+            th:alt-title="${iStat.even}? 'even' : 'odd'">
+            <td th:text="${book.roll_no}">-</td>
+            <td th:text="${book.emp_name}">-</td>
+            <td th:text="${book.emp_region}">-</td>
+            <td th:text="${book.applicable_patch_id}">-</td>
+            <td>
+                <span th:text="${book.patch_compliance}"
+                      th:class="${book.patch_compliance == 'Non-compliant' ? 'non-compliant-text' : 'compliant-text'}">
+                </span>
+            </td>
+            <td th:text="${book.date_of_completion}">-</td>
+            <td th:text="${book.e_mail_id}">-</td>
+        </tr>
+    </tbody>
+</table>
+
+
+	<br />
+<div class="pagination-container">
+
+	<center>
+		<div th:if="${bookPage.totalPages > 0}" class="pagination"
+			th:each="pageNumber : ${pageNumbers}">
+			<a th:href="@{/compliance-svc/filter(size=${bookPage.size}, page=${pageNumber})}"
+				th:text=${pageNumber}
+				th:class="${pageNumber==bookPage.number + 1} ? active"></a>
+		</div>
+	</center>
+	</div>
+	
+	<!--     <div>
+        <p>
+            <a th:href="@{/}" th:text="#{msg.Home}"></a>
+        </p>
+    </div>
+  -->
+
+
+	<div id="loaderid"></div>
+
+
+
+
+</body>
+</html>

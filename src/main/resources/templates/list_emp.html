@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+<meta charset="ISO-8859-1">
+<title>Home</title>
+<script type="text/javascript"></script>
+
+<style>
+  .pagination-container {
+    position: fixed; /* Fixed position to keep it at the bottom */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white; /* Set the background color as needed */
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc; /* Add a border if needed */
+  }
+  
+  .pagination {
+    display: inline-block;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
+
+  .menu-link1 {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Set your desired background color */
+    color: #fff; /* Set your desired text color */
+    text-decoration: none;
+    border: 1px solid #007BFF; /* Set your desired border color */
+    border-radius: 5px; /* Adjust as needed for rounded corners */
+    cursor: pointer;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Adjust the hover background color as desired */
+    border: 1px solid #0056b3; /* Adjust the hover border color as desired */
+}
+
+        .tabs {
+            display: flex;
+            margin-top: 20px;
+            width: 20%;
+            
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border: 1px solid #3498db;
+            background-color: #f7f7f7;
+            white-space: nowrap; /* Prevent line breaks */
+        }
+
+        .tabContent {
+            display: none;
+        }
+
+/* Table Styling */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px;
+    text-align: center;
+}
+
+/* Header Row Styling */
+.styled-table th {
+    background-color: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+/* Alternate Row Colors */
+.styled-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Hover Effect */
+.styled-table tbody tr:hover {
+    background-color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+
+.menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.menu-item {
+    margin-left: 20px;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.menu-link:hover {
+    background-color: #2980b9;
+}
+
+
+ .menu-container {
+            display: flex;
+            justify-content: flex-end;
+            padding: 10px 0;
+        }
+
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+
+        .menu-item {
+            margin-left: 20px;
+        }
+
+        .menu-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 10px 20px;
+            background-color: #3498db;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-link:hover {
+            background-color: #2980b9;
+        }
+    
+#listOfAllSlots {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 20px;
+	border: 1px solid #ddd;
+}
+
+/* Style table header */
+#listOfAllSlots th {
+	background-color: #3498db;
+	color: white;
+	text-align: center;
+	padding: 12px;
+	font-weight: bold;
+	border: 1px solid #ddd;
+}
+
+/* Style table rows */
+#listOfAllSlots td {
+	padding: 10px;
+	border: 1px solid #ddd;
+}
+
+/* Alternate row background color */
+#listOfAllSlots tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+
+/* Style the buttons in each row */
+#listOfAllSlots button {
+	background-color: #3498db;
+	color: white;
+	border: none;
+	padding: 6px 12px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+/* Hover effect for buttons */
+#listOfAllSlots button:hover {
+	background-color: #2574a9;
+}
+
+/* Disable button style */
+#listOfAllSlots button:disabled {
+	background-color: gray;
+	cursor: not-allowed;
+}
+
+/* Style the message paragraph */
+#listOfAllSlots p {
+	margin: 0;
+	font-weight: bold;
+	color: red;
+}
+
+.form-button-container {
+	display: flex; /* Use flexbox layout */
+	justify-content: space-between; /* Space evenly between the buttons */
+	align-items: center; /* Center vertically */
+	margin-top: 10px;
+	/* Add some spacing between the buttons and other form elements if needed */
+}
+
+.button-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-top: 10px;
+}
+
+.button-form {
+	display: inline-block;
+}
+
+.easy-connect-container {
+	text-align: center;
+	padding: 20px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+}
+
+/* Style for the icon image */
+.icon {
+	width: 200px;
+	height: 45px;
+}
+
+.center-box {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 10vh;
+}
+
+.box {
+	border: 2px solid #3498db; /* Border color */
+	border-radius: 10px; /* Rounded corners */
+	padding: 20px;
+	background-color: #f2f2f2; /* Background color */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow */
+	text-align: center;
+}
+
+/* Style for the "Easy Connect" title */
+.title {
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+/* Style for the icon image */
+.icon {
+	width: 200px;
+	height: 45px;
+}
+
+.center-icon {
+	text-align: center;
+}
+
+.center-icon img {
+	display: block;
+	margin: 0 auto;
+}
+
+button {
+	background-color: #3498db;
+	color: white;
+	padding: 8px 16px;
+	border: none;
+	cursor: pointer;
+	border-radius: 4px;
+	font-weight: bold; /* Make the text bold */
+}
+
+/* Style the "Book" button when disabled */
+button:disabled {
+	background-color: gray;
+	cursor: not-allowed;
+}
+
+.pagination {
+	display: inline-block;
+}
+
+.red {
+	color: #0024ff
+}
+
+.container {
+	margin: 0 auto;
+	display: flex;
+	align-items: center;
+}
+
+.pagination a {
+	color: black;
+	float: left;
+	padding: 5px 5px;
+	text-decoration: none;
+	align-items: center;
+	display: flex;
+}
+
+.pagination a.active {
+	background-color: gray;
+	color: white;
+	border-radius: 2px;
+	align-items: center;
+	display: flex;
+}
+
+#menu {
+	font-family: tahoma;
+	margin-top: 10px;
+	margin-right: 10px;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50%;
+}
+
+.loader {
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 70px;
+	height: 70px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+	position: fixed; /* or absolute */
+	top: 60%;
+	left: 40%;
+}
+
+/* Safari */
+@
+-webkit-keyframes spin { 0% {
+	-webkit-transform: rotate(0deg);
+}
+
+100
+%
+{
+-webkit-transform
+:
+rotate(
+360deg
+);
+}
+}
+@
+keyframes spin { 0% {
+	transform: rotate(0deg);
+}
+
+100
+%
+{
+transform
+:
+rotate(
+360deg
+);
+}
+}
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	border: 1px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+
+tr:nth-child(even) {
+	background-color: #dddddd;
+}
+</style>
+
+<script type="text/javascript">
+
+function setValue(source) {
+    //document.getElementById("helloid").style.display = ""; 
+    document.getElementById("loaderid").className  = "loader"; 
+}
+
+function clearForm() {
+    document.getElementById("clear_usrform").submit(); // Submit the second form
+}
+
+function filterForm() {
+    document.getElementById("filter_usrform").submit(); // Submit the form
+}
+
+</script>
+
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jQuery UI Dialog - Default functionality</title>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script>
+  $( function() {
+    $( "#dialog" ).dialog();
+  } );
+  </script>
+
+
+<script
+	src="https://apis.google.com/js/platform.js?onload=onLoadCallback"
+	async defer></script>
+</head>
+<body>
+
+
+
+
+
+
+    
+    <div class="container">
+<a th:href="@{/}">
+    <img class="icon" th:src="@{/EasyConnect.jpg}" alt="Easy Connect">
+</a>
+       
+        <ul class="menu"> 
+            <li class="menu-item">
+                <a th:href="@{/user-svc/admin}" class="menu-link">Admin</a>
+            </li>            
+
+            <li class="menu-item">
+                <a th:href="@{/}" class="menu-link">Home</a>
+            </li>        
+        </ul>
+    </div>
+    
+	<br />
+
+ <div class="tabs">
+    <div class="tab tabLink menu-link1" onclick="openTab('CreateSlot')">Employees</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/emp/add} + '\''">Add Employee</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/emp/remove} + '\''">Remove Employee</div>
+</div>
+
+	<!-- <center><img src="Patch_icon.png" alt="Patch Management"  width="300" height="200" align="middle">
+</center> -->
+	<br />
+	<table id="listOfEmployees" class="styled-table">
+		<thead>
+			<tr>
+						<th>Emp Id</th>
+						<th>Name</th>
+						<th>Region</th>
+						<!--  <th>Patch ID</th>
+						<th>Compliance</th>
+						<th>Completion Date</th>-->
+						<!-- <th>Applicability Status</th> -->
+						<th>E-Mail Id</th>
+			</tr>
+		</thead>
+		<tbody>
+<tr th:each="book, iStat : ${bookPage.content}"
+    th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
+    th:alt-title="${iStat.even}? 'even' : 'odd'">
+    <tr th:each="book, iStat : ${bookPage.content}">
+            <td th:text="${book.roll_no}">-</td>
+            <td th:text="${book.emp_name}">-</td>
+            <td th:text="${book.emp_region}">-</td>
+           <!--   <td th:text="${book.applicable_patch_id}">-</td>
+            <td th:text="${book.patch_compliance}">-</td>
+            <td th:text="${book.date_of_completion}">-</td> -->
+            <td th:text="${book.e_mail_id}">-</td>
+
+            
+			
+			</tr>
+		</tbody>
+	</table>
+	<br />
+<div class="pagination-container">
+
+	<center>
+		<div th:if="${bookPage.totalPages > 0}" class="pagination"
+			th:each="pageNumber : ${pageNumbers}">
+			<a th:href="@{/user-svc/emp(size=${bookPage.size}, page=${pageNumber})}"
+				th:text=${pageNumber}
+				th:class="${pageNumber==bookPage.number + 1} ? active"></a>
+		</div>
+	</center>
+	</div>
+	<!--     <div>
+        <p>
+            <a th:href="@{/}" th:text="#{msg.Home}"></a>
+        </p>
+    </div>
+  -->
+
+
+	<div id="loaderid"></div>
+
+
+</body>
+</html>
