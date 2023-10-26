@@ -39,9 +39,11 @@ graph TB;
 
 ## Microservices -    
  -  [it-patch-management](https://github.com/jdk-world/it-patch-management)    
- -  [compliance-reporting-service](https://github.com/jdk-world/compliance-reporting-service)   
- -  [patch-management-services](https://github.com/jdk-world/patch-management-services)   
+ -  [compliance-reporting-service](https://github.com/jdk-world/compliance-reporting-service)       
+ -  [patch-management-services](https://github.com/jdk-world/patch-management-services)       
  -  [user-management-service](https://github.com/jdk-world/user-management-service)   
+ -  [slot-management-service](https://github.com/jdk-world/slot-management-service)    
+
 
 
 ## Broad Area of Work
