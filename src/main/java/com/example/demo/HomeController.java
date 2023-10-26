@@ -74,6 +74,11 @@ public class HomeController {
 	
 	@Autowired
 	ComplianceManagementService complianceManagementService;
+
+	@Autowired
+	SlotManagementService slotManagementService;
+	
+	
 	
 	
 	@Autowired
@@ -399,23 +404,17 @@ public class HomeController {
 	        return Arrays.asList(availableIDs);
 	    }
 	
-//	@RequestMapping(value = "/admin", method = RequestMethod.GET)
-	public String getAdmin() {
-		return "admin.html";
-	}
+
 
 	@RequestMapping(value = "/slot-svc", method = RequestMethod.GET)
 	public String getAdmin1(ModelMap model) {
 		model.addAttribute("regions", getAllRegions());
 		model.addAttribute("time_zones", getTimeZones1());
 
-		return "admin1.html";
+		return "add_slot.html";
 	}
 
-	@RequestMapping(value = "/admin2", method = RequestMethod.GET)
-	public String getAdmin2() {
-		return "admin2.html";
-	}
+
 
 	@RequestMapping(value = "/slot-svc", method = RequestMethod.POST)
 	public String postAdmin(@ModelAttribute SlotModel slotModel, ModelMap model)
@@ -425,40 +424,20 @@ public class HomeController {
 		msg = "";
 		getAllRegions();
 		if (StringUtils.isNotBlank(slotModel.getSlot_end())) { // Create Slot Case
-			springBootJdbcController.insertslot(slotModel.getSlot_start(), slotModel.getSlot_end(),
-					slotModel.getIt_email_list(), slotModel.getAttendee_email_list(), slotModel.getRegion(),
-					slotModel.isIs_booked(), slotModel.getTime_zone());
+			msg = slotManagementService.insertslot(slotModel);
 		} else { // Create Slots Case
-			springBootJdbcController.insertslots(slotModel.getSlot_start(), slotModel.getSlots_end(),
-					slotModel.getSlot_duration(), slotModel.getIt_email_list(), slotModel.getAttendee_email_list(),
-					slotModel.getRegion(), slotModel.isIs_booked(), slotModel.getTime_zone(),
-					slotModel.isInclude_weekends(), slotModel.getHolidays(), slotModel.getCreate_event());
+			msg = slotManagementService.insertslots(slotModel);
+
 
 		}
-		model.addAttribute("msg", "Sucessfully created");
+		model.addAttribute("msg", msg);
 
-		return "admin1.html";
+		return "add_slot.html";
 
 	}
 
 
 	
-	@RequestMapping(value = "/admin2", method = RequestMethod.POST)
-	public String postAdmin2(@ModelAttribute SlotModel slotModel, ModelMap model)
-			throws ParseException, IOException, GeneralSecurityException {
-		// System.err.println(BASE_PATH_CLOUD);
-		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
-		msg = "";
-		springBootJdbcController.insertslots(slotModel.getSlot_start(), slotModel.getSlots_end(),
-				slotModel.getSlot_duration(), slotModel.getIt_email_list(), slotModel.getAttendee_email_list(),
-				slotModel.getRegion(), slotModel.isIs_booked(), slotModel.getTime_zone(),
-				slotModel.isInclude_weekends(), slotModel.getHolidays(), slotModel.getCreate_event());
-
-		model.addAttribute("msg", "Sucessfully created");
-
-		return "admin2.html";
-
-	}
 
 
 	public String getCurrentServiceId() {
