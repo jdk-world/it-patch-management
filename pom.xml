@@ -17,6 +17,18 @@
 		<java.version>1.8</java.version>
 	</properties>
 	<dependencies>
+
+
+
+
+<!-- https://mvnrepository.com/artifact/net.sf.biweekly/biweekly -->
+<dependency>
+    <groupId>net.sf.biweekly</groupId>
+    <artifactId>biweekly</artifactId>
+    <version>0.6.7</version>
+</dependency>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
@@ -29,6 +41,42 @@
 		</dependency>
 		
 	-->
+	
+	
+    <!-- Google API client library -->
+    <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client</artifactId>
+        <version>1.32.1</version> <!-- Use the latest version available -->
+    </dependency>
+
+    <!-- Google API client library (Gson) -->
+    <dependency>
+        <groupId>com.google.api-client</groupId>
+        <artifactId>google-api-client-gson</artifactId>
+        <version>1.32.1</version> <!-- Use the same version as above -->
+    </dependency>
+
+    <!-- Gmail API client library -->
+<!-- https://mvnrepository.com/artifact/com.google.apis/google-api-services-gmail -->
+<dependency>
+    <groupId>com.google.apis</groupId>
+    <artifactId>google-api-services-gmail</artifactId>
+    <version>v1-rev110-1.25.0</version>
+</dependency>
+
+
+<dependency>
+    <groupId>com.sun.mail</groupId>
+    <artifactId>javax.mail</artifactId>
+    <version>1.6.2</version> <!-- Use the appropriate version -->
+</dependency>
+
+
+<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+
+
+    
 				<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -217,6 +265,18 @@
 
 
 	</dependencies>
+<repositories>
+	    <repository>
+        <id>mvnrepository</id>
+        <url>https://mvnrepository.com</url>
+    </repository>
+
+    <repository>
+        <id>central</id>
+        <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+</repositories>
+
 
 	<build>
 		<plugins>

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Add Region</title>
+<title>Add Slots</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -81,6 +81,16 @@
     border-radius: 5px;
 }
   
+    .menu-link1 {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+  
   .add-holiday-container {
     display: inline-flex;
     align-items: center;
@@ -107,16 +117,6 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
-   
-     .menu-link1 {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
-    padding: 10px 20px;
-    background-color: #3498db;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
     
 .container {
     display: flex;
@@ -131,33 +131,6 @@
     margin: 0;
     display: flex;
 }
-  .pagination-container {
-    position: fixed; /* Fixed position to keep it at the bottom */
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    background-color: white; /* Set the background color as needed */
-    text-align: center;
-    padding: 10px;
-    border-top: 1px solid #ccc; /* Add a border if needed */
-  }
-  
-  .pagination {
-    display: inline-block;
-  }
-  
-  .pagination a {
-    color: black;
-    float: left;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-  
-  .active {
-    background-color: #007bff;
-    color: white;
-  }
-  
 
 .menu-item {
     margin-left: 20px;
@@ -473,7 +446,7 @@ tr:nth-child(even) {
             cursor: pointer;
             border: 1px solid #3498db;
             background-color: #f7f7f7;
-            white-space: nowrap; /* Prevent line breaks */
+                       white-space: nowrap; /* Prevent line breaks */
             
         }
 
@@ -564,64 +537,136 @@ tr:nth-child(even) {
     
 </div>
  -->
- 
-
     <div class="container">
 <a th:href="@{/}">
     <img class="icon" th:src="@{/EasyConnect.jpg}" alt="Easy Connect">
 </a>
        
-       <ul class="menu">
+  
+        <ul class="menu">
 
-           
-
-            <li class="menu-item">
-                <a th:href="@{/user-svc/emp}" class="menu-link">Employees</a>
-            </li> 
             <li class="menu-item">
                 <a th:href="@{/}" class="menu-link">Home</a>
-            </li>        
-                      
-            
+            </li>
         </ul>
     </div>
     
 	<br />
-	
- <div class="tabs">
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin} + '\''">Admin</div>
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin/add} + '\''">Add Admin</div>
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin/remove} + '\''">Remove Admin</div>
-    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/user-svc/admin/add-region} + '\''">Add Region</div>
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin/add-role} + '\''">Add Role</div>
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin/roles} + '\''">Roles</div>
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/user-svc/admin/regions} + '\''">Regions</div>    
-</div>	
+
+<div class="tabs">
+
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/add} + '\''">Add Slot</div>
+    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/adds} + '\''">Add Slots</div>
+    
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/remove} + '\''">Delete Slots</div>
+    
+    
+</div>
 
 
-<div id="CreateEmp" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
+<div id="CreateSlots" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
     <div class="form-container">
-        <form action="#" th:action="@{/user-svc/admin/add-region}" method="post" onload="myDate()">
-            <label for="region_id"><b>Region Id</b></label>
-            <input type="text" id="region_id" name="region_id" value="" class="narrow-input"><br>
+        <form action="#" th:action="@{/slot-svc/slot/adds}" method="post" onload="myDate()">
+            <label for="slot_start"><b>Start Date & Time</b></label>
+            <input type="datetime-local" id="slots_start" name="slot_start" value="" class="narrow-input"><br>
 
-            <label for="region_name"><b>Region Name</b></label>
-            <input type="text" id="region_name" name="region_name" value="" class="narrow-input"><br>
+            <label for="slots_end"><b>End Date & Time</b></label>
+            <input type="datetime-local" id="slots_end" name="slots_end" value="" class="narrow-input"><br>
 
+            <label for="it_email_list"><b>IT Admin e-mail List</b></label>
+            <input type="text" id="it_email_list" name="it_email_list" value="saurabh.gupta940@hcl.com" class="narrow-input"><br>
+
+            <label for="attendee_email_list"><b>Attendee e-mail List</b></label>
+            <input type="text" id="attendee_email_list" name="attendee_email_list" value="saurabh2204@google.com" class="narrow-input"><br>
+
+      		<label for="slot_duration" class="other"><b>Slot Duration(in Minutes)</b></label>
+  			<input type="text" id="slot_duration" name="slot_duration" value="60" class="narrow-input"><br>
+
+ <!--       <label for="include_weekends" class="other"><b>Include Weekends?</b></label>
+  			<input type="text" id="include_weekends" size="65" name="is_booked" value="0" class="narrow-input"><br>
+ --> 
+			 <label for="include_weekends" class="other"><b>Include Weekends?</b></label>
+			<select id="include_weekends" name="is_booked" class="narrow-input">
+						    <option value="0">No</option>
+			
+			    <option value="1">Yes</option>
+			</select><br>
+			 
  
+<div class="add-holiday-container">
+    <label for="holiday_calendar"><b>Add Holiday</b></label>
+    <input type="button" value="+" onclick="myFunctionHol()"  />
+</div> <br/>
+<input type="date" id="holiday_calendar" name="holiday_calendar" value="2022-08-22" class="narrow-input-date" />
+  <div id="demo1"></div>
+
+ <!-- 
+			 <input type="button" value="Add Holidays" onclick="myFunctionHol()"/>  			 
+			 <input type="date" id="holiday_calendar" name="holiday_calendar" value="2022-08-22" class="narrow-input">
+  -->
+
+            <label for="region"><b>Region</b></label>
+            <select class="narrow-input" id="region" name="region">
+								<option th:each="region : ${regions}" th:value="${region.name}"
+									th:text="${region.name}"></option>
+			</select>
+
+			<label for="is_booked"><b>Auto book?</b></label>
+			<select id="is_booked" name="is_booked" class="narrow-input">
+						    <option value="0">No</option>
+			
+			    <option value="1">Yes</option>
+			</select><br>
+
+
+<label for="time_zone"><b>Time Zone</b></label>
+<select class="narrow-input" id="time_zone" name="time_zone">
+    <!-- You can keep all time zone options here initially except 'ALL' -->
+    <option th:each="time_zone : ${time_zones}" th:value="${time_zone}" th:text="${time_zone}" th:unless="${time_zone == 'ALL'}"></option>
+</select>
+
+<script type="text/javascript">
+    // Get references to the region and time_zone select elements
+    var regionSelect = document.getElementById("region");
+    var timeZoneSelect = document.getElementById("time_zone");
+
+    // Add a change event listener to the region select element
+    regionSelect.addEventListener("change", function () {
+        // Get the selected region value
+        var selectedRegion = regionSelect.value;
+
+        // Get all time zone options
+        var timeZoneOptions = timeZoneSelect.querySelectorAll("option");
+
+        // Filter the time zone options based on the selected region value
+        timeZoneOptions.forEach(function (option) {
+            var timeZoneValue = option.getAttribute("value");
+            if (selectedRegion === 'ALL' || timeZoneValue.includes(selectedRegion)) {
+                option.style.display = "block"; // Show the option
+            } else {
+                option.style.display = "none"; // Hide the option
+            }
+        });
+
+        // Find and select the first visible time zone option
+        var firstVisibleOption = timeZoneSelect.querySelector("option[value]:not([style*='display: none'])");
+        if (firstVisibleOption) {
+            firstVisibleOption.selected = true;
+        }
+    });
+</script>
+
             <br/>
             
-            
 
-            <input type="submit" value="Add Region">
+            <input type="submit" value="Create Slots">
             <span th:text="${msg}" class="red"></span>
+		    <input type="hidden" id="holidays" name="holidays" value="">
 
             <div id="helloid" class="loader"></div>
         </form>
     </div>
 </div>
-
-
 
 </body>
 </html>

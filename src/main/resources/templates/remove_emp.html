@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-   <link rel="icon" type="image/x-icon" href="favicon.ico">
+   <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+<title>Remove Emp</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -567,7 +568,7 @@ tr:nth-child(even) {
 <div id="RemoveEmp" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
     <div class="form-container">
         <form action="#" th:action="@{/user-svc/emp/remove}" method="post" onload="myDate()">
-            <label for="roll_no"><b>Roll No</b></label>
+            <label for="roll_no"><b>Emp Id</b></label>
             <input type="text" id="roll_no" name="roll_no" value="" class="narrow-input"><br>
 
  

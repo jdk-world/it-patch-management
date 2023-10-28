@@ -1,7 +1,13 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
-   <link rel="icon" type="image/x-icon" href="favicon.ico">
+   <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+
+<meta charset="ISO-8859-1">
+<title>Add Slot</title>
+<script type="text/javascript">
+
+</script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -78,6 +84,16 @@
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+}
+  
+    .menu-link1 {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #3498db;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
   
   .add-holiday-container {
@@ -435,6 +451,8 @@ tr:nth-child(even) {
             cursor: pointer;
             border: 1px solid #3498db;
             background-color: #f7f7f7;
+                       white-space: nowrap; /* Prevent line breaks */
+            
         }
 
         .tabContent {
@@ -524,6 +542,7 @@ tr:nth-child(even) {
     
 </div>
  -->
+ 
     <div class="container">
 <a th:href="@{/}">
     <img class="icon" th:src="@{/EasyConnect.jpg}" alt="Easy Connect">
@@ -542,14 +561,18 @@ tr:nth-child(even) {
 
 
 <div class="tabs">
-    <div class="tab tabLink" onclick="openTab('CreateSlot')">Create Slot</div>
-    <div class="tab tabLink" onclick="openTab('CreateSlots')">Create Slots</div>
+
+    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/add} + '\''">Add Slot</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/adds} + '\''">Add Slots</div>
+    
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/slot-svc/slot/remove} + '\''">Delete Slots</div>
+    
     
 </div>
 
 <div id="CreateSlot" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
     <div class="form-container">
-        <form action="#" th:action="@{/slot-svc}" method="post" onload="myDate()">
+        <form action="#" th:action="@{/slot-svc/slot/add}" method="post" onload="myDate()">
             <label for="slot_start"><b>Start Date & Time</b></label>
             <input type="datetime-local" id="slot_start" name="slot_start" value="" class="narrow-input"><br>
 
@@ -562,11 +585,10 @@ tr:nth-child(even) {
             <label for="attendee_email_list"><b>Attendee e-mail List</b></label>
             <input type="text" id="attendee_email_list" name="attendee_email_list" value="saurabh2204@google.com" class="narrow-input"><br>
 
-            <label for="region"><b>Region</b></label>
-            <select class="narrow-input" id="region" name="region">
-								<option th:each="region : ${regions}" th:value="${region.name}"
-									th:text="${region.name}"></option>
-			</select>
+<label for="region"><b>Region</b></label>
+<select class="narrow-input" id="region" name="region">
+    <option th:each="region : ${regions}" th:value="${region.name}" th:text="${region.name}"></option>
+</select>
 
 			<label for="is_booked"><b>Auto book?</b></label>
 			<select id="is_booked" name="is_booked" class="narrow-input">
@@ -576,12 +598,43 @@ tr:nth-child(even) {
 			</select><br>
 
 
-            <label for="time_zone"><b>Time Zone</b></label>
-           <!--  <input type="text" id="time_zone" name="time_zone" value="IST" class="narrow-input"><br> -->
-            <select class="narrow-input" id="time_zone" name="time_zone">
-								<option th:each="time_zone : ${time_zones}" th:value="${time_zone}"
-									th:text="${time_zone}"></option>
-			</select>
+<label for="time_zone"><b>Time Zone</b></label>
+<select class="narrow-input" id="time_zone" name="time_zone">
+    <!-- You can keep all time zone options here initially except 'ALL' -->
+    <option th:each="time_zone : ${time_zones}" th:value="${time_zone}" th:text="${time_zone}" th:unless="${time_zone == 'ALL'}"></option>
+</select>
+
+<script type="text/javascript">
+    // Get references to the region and time_zone select elements
+    var regionSelect = document.getElementById("region");
+    var timeZoneSelect = document.getElementById("time_zone");
+
+    // Add a change event listener to the region select element
+    regionSelect.addEventListener("change", function () {
+        // Get the selected region value
+        var selectedRegion = regionSelect.value;
+
+        // Get all time zone options
+        var timeZoneOptions = timeZoneSelect.querySelectorAll("option");
+
+        // Filter the time zone options based on the selected region value
+        timeZoneOptions.forEach(function (option) {
+            var timeZoneValue = option.getAttribute("value");
+            if (selectedRegion === 'ALL' || timeZoneValue.includes(selectedRegion)) {
+                option.style.display = "block"; // Show the option
+            } else {
+                option.style.display = "none"; // Hide the option
+            }
+        });
+
+        // Find and select the first visible time zone option
+        var firstVisibleOption = timeZoneSelect.querySelector("option[value]:not([style*='display: none'])");
+        if (firstVisibleOption) {
+            firstVisibleOption.selected = true;
+        }
+    });
+</script>
+
 
             <br/>
             
@@ -596,79 +649,7 @@ tr:nth-child(even) {
 </div>
 
 
-<div id="CreateSlots" class="tabContent box">
-    <div class="form-container">
-        <form action="#" th:action="@{/slot-svc}" method="post" onload="myDate()">
-            <label for="slot_start"><b>Start Date & Time</b></label>
-            <input type="datetime-local" id="slots_start" name="slot_start" value="" class="narrow-input"><br>
 
-            <label for="slots_end"><b>End Date & Time</b></label>
-            <input type="datetime-local" id="slots_end" name="slots_end" value="" class="narrow-input"><br>
-
-            <label for="it_email_list"><b>IT Admin e-mail List</b></label>
-            <input type="text" id="it_email_list" name="it_email_list" value="saurabh.gupta940@hcl.com" class="narrow-input"><br>
-
-            <label for="attendee_email_list"><b>Attendee e-mail List</b></label>
-            <input type="text" id="attendee_email_list" name="attendee_email_list" value="saurabh2204@google.com" class="narrow-input"><br>
-
-      		<label for="slot_duration" class="other"><b>Slot Duration(in Minutes)</b></label>
-  			<input type="text" id="slot_duration" name="slot_duration" value="60" class="narrow-input"><br>
-
- <!--       <label for="include_weekends" class="other"><b>Include Weekends?</b></label>
-  			<input type="text" id="include_weekends" size="65" name="is_booked" value="0" class="narrow-input"><br>
- --> 
-			 <label for="include_weekends" class="other"><b>Include Weekends?</b></label>
-			<select id="include_weekends" name="is_booked" class="narrow-input">
-						    <option value="0">No</option>
-			
-			    <option value="1">Yes</option>
-			</select><br>
-			 
- 
-<div class="add-holiday-container">
-    <label for="holiday_calendar"><b>Add Holiday</b></label>
-    <input type="button" value="+" onclick="myFunctionHol()"  />
-</div> <br/>
-<input type="date" id="holiday_calendar" name="holiday_calendar" value="2022-08-22" class="narrow-input-date" />
-  <div id="demo1"></div>
-
- <!-- 
-			 <input type="button" value="Add Holidays" onclick="myFunctionHol()"/>  			 
-			 <input type="date" id="holiday_calendar" name="holiday_calendar" value="2022-08-22" class="narrow-input">
-  -->
-
-            <label for="region"><b>Region</b></label>
-            <select class="narrow-input" id="region" name="region">
-								<option th:each="region : ${regions}" th:value="${region.name}"
-									th:text="${region.name}"></option>
-			</select>
-
-			<label for="is_booked"><b>Auto book?</b></label>
-			<select id="is_booked" name="is_booked" class="narrow-input">
-						    <option value="0">No</option>
-			
-			    <option value="1">Yes</option>
-			</select><br>
-
-
-            <label for="time_zone"><b>Time Zone</b></label>
-           <!--  <input type="text" id="time_zone" name="time_zone" value="IST" class="narrow-input"><br> -->
-            <select class="narrow-input" id="time_zone" name="time_zone">
-								<option th:each="time_zone : ${time_zones}" th:value="${time_zone}"
-									th:text="${time_zone}"></option>
-			</select>
-
-            <br/>
-            
-
-            <input type="submit" value="Create Slots">
-            <span th:text="${msg}" class="red"></span>
-		    <input type="hidden" id="holidays" name="holidays" value="">
-
-            <div id="helloid" class="loader"></div>
-        </form>
-    </div>
-</div>
 
 </body>
 </html>

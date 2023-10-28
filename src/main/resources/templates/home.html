@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <link rel="icon" type="image/x-icon" href="favicon.ico">
+   <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 <meta charset="ISO-8859-1">
 <title>Home</title>
@@ -485,7 +485,7 @@ if (emailId != null) {
         <ul class="menu">
 
             <li class="menu-item">
-                <a th:href="@{/slot-svc}" class="menu-link">Slot Management</a>
+                <a th:href="@{/slot-svc/slot/add}" class="menu-link">Slot Management</a>
             </li>
             <li class="menu-item">
                 <a th:href="@{/catelog-svc/patch}" class="menu-link">Patch Management</a>
@@ -511,8 +511,8 @@ if (emailId != null) {
 					<tr>
 						<th>Slot Start</th>
 						<th>Slot End</th>
-						<th>Time Zone</th>
 						<th>Region</th>
+						<th>Time Zone</th>
 						<th>Available Slots</th>
 
 
@@ -525,13 +525,7 @@ if (emailId != null) {
 						</td>
 						<td><input type="datetime-local" id="filter_slot_end"
 							name="filter_slot_end" th:value="${filter_slot_end}"></td>
-						<td>
-							<!--	  <input type="text" id="time_zone"  name="time_zone" value=""> -->
-							<select class="form-control" id="time_zone" name="time_zone">
-								<option th:each="option : ${options}" th:value="${option}"
-									th:text="${option}"></option>
-						</select>
-						</td>
+
 						<td>
 							<!-- 		<input type="text" id="region"  name="region" value="">  -->
 							<select class="form-control" id="region" name="region">
@@ -540,6 +534,63 @@ if (emailId != null) {
 									th:text="${region}"></option>
 						</select>
 						</td>
+
+	
+						
+						<td>
+							<select class="form-control" id="time_zone" name="time_zone">
+							    <!-- You can keep all time zone options here initially -->
+							    <option th:each="time_zone : ${options}" th:value="${time_zone}" th:text="${time_zone}"></option>
+							</select>
+						</td>
+						    <input type="hidden" name="selectedTimeZones" id="hiddenSelectedTimeZones" value="" />
+
+<script type="text/javascript">
+var regionSelect = document.getElementById("region");
+var timeZoneSelect = document.getElementById("time_zone");
+var timeZoneOptions = timeZoneSelect.querySelectorAll("option");
+
+regionSelect.addEventListener("change", function () {
+    var selectedRegion = regionSelect.value;
+
+    // Create an array to store selected time zones
+    var selectedTimeZones = [];
+
+    if (selectedRegion === 'ALL') {
+        // Select 'ALL' in the time zone dropdown
+        timeZoneSelect.value = 'ALL';
+        // Show all time zone options
+        timeZoneOptions.forEach(function (option) {
+            option.style.display = "block";
+            selectedTimeZones.push(option.value); // Add all time zones to the array
+        });
+    } else {
+        // Clear the time_zone selection
+        timeZoneSelect.value = "";
+        // Filter and show the relevant time zone options
+        timeZoneOptions.forEach(function (option) {
+            var timeZoneValue = option.getAttribute("value");
+            if (timeZoneValue.includes(selectedRegion) || timeZoneValue === 'ALL') {
+                option.style.display = "block";
+                selectedTimeZones.push(option.value); // Add selected time zones to the array
+            } else {
+                option.style.display = "none";
+            }
+        });
+
+        // Find and select the first visible time zone option
+        var firstVisibleOption = timeZoneSelect.querySelector("option[value]:not([style*='display: none'])");
+        if (firstVisibleOption) {
+            firstVisibleOption.selected = true;
+        }
+    }
+
+    // Set the selected time zones as a hidden input value in the form
+    document.getElementById("hiddenSelectedTimeZones").value = selectedTimeZones.join(",");
+});
+
+</script>
+											
 
 						<td><input type="checkbox" id="is_booked" name="is_booked"
 							th:checked="${checkedMarkForAvailableFilterCheckbox}"
@@ -577,7 +628,7 @@ if (emailId != null) {
 			</tr>
 		</thead>
 		<tbody>
-<tr th:each="book, iStat : ${bookPage.content}"
+<tr  th:each="book, iStat : ${bookPage.content}"
     th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
     th:alt-title="${iStat.even}? 'even' : 'odd'">
     <tr th:each="book, iStat : ${bookPage.content}">

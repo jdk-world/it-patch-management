@@ -76,5 +76,23 @@ public class SlotManagementService {
 		return response;
 	}
 
+	public String deleteslots(List<String> slotIdList) {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<List<String>> request = new HttpEntity<>(slotIdList, headers);
+	    
+		String response = "";
+		try {
+
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(SLOT_MGMT_SERVICE_BASE_URL + "/deleteslots", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return response;
+	}
+
+
 	
 }

@@ -1,5 +1,52 @@
 package com.example.demo;
 
+import biweekly.Biweekly;
+import biweekly.ICalendar;
+import biweekly.component.VEvent;
+import biweekly.property.Summary;
+import biweekly.property.Location;
+import biweekly.property.Description;
+import biweekly.property.DateStart;
+import biweekly.property.DateEnd;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.io.ByteArrayOutputStream;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.internet.MimeBodyPart;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.util.ByteArrayDataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.mail.util.ByteArrayDataSource;
+
+import java.util.Properties;
+import javax.mail.Session;
+import javax.mail.Transport;
+
+import java.util.Properties;
+import javax.mail.internet.MimeMessage;
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Message;
+import java.util.Properties;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,6 +64,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,6 +74,32 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
+
+
+
+import com.google.api.client.auth.oauth2.Credential;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventAttendee;
+import com.google.api.services.calendar.model.EventDateTime;
+import com.google.api.services.calendar.model.EventReminder;
+import com.google.api.services.calendar.model.ConferenceData;
+import com.google.api.services.calendar.model.CreateConferenceRequest;
+import com.google.api.services.calendar.model.ConferenceSolution;
+import com.google.api.services.calendar.model.ConferenceSolutionKey;
+
+import com.google.api.services.gmail.Gmail;
+import com.google.api.services.gmail.GmailScopes;
+import com.google.api.services.gmail.model.Message;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -54,6 +128,8 @@ import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.gmail.GmailScopes;
+
 import com.google.api.services.calendar.model.ConferenceData;
 import com.google.api.services.calendar.model.ConferenceSolution;
 import com.google.api.services.calendar.model.ConferenceSolutionKey;
@@ -70,14 +146,14 @@ public class SpringBootJdbcController {
 	/** Global instance of the JSON factory. */
 	private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 	/** Directory to store authorization tokens for this application. */
-	private static final String TOKENS_DIRECTORY_PATH = "tokens";
+	private static final String TOKENS_DIRECTORY_PATH = "tokens1";
 
 	/**
 	 * Global instance of the scopes required by this quickstart. If modifying these
 	 * scopes, delete your previously saved tokens/ folder.
 	 */
 	private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-	private static final String CREDENTIALS_FILE_PATH = "/credentials.json";
+	private static final String CREDENTIALS_FILE_PATH = "/credentials1.json";
 
 	private static final String SUMMARY = "IT Patch Management";
 	private static final String LOCATION = "800 Howard St., San Francisco, CA 94103";
@@ -91,6 +167,12 @@ public class SpringBootJdbcController {
 	private static final String DAY_SLOT_START_TIME = "09:00";
 	private static final String DAY_SLOT_END_TIME = "17:00";
 	private static final String SCOPE_IDENTITY_QUERY = "SELECT SCOPE_IDENTITY()";
+	private static String emailSubject = "Event Invitation: IT Patch Management";
+	private static final String senderEmail = "saurabh2204@gmail.com";
+
+	
+	
+
 
 	long no_of_days = 0;
 	String[] slot_start_date_time = null, slot_end_date_time = null;
@@ -150,6 +232,7 @@ public class SpringBootJdbcController {
 	 * @throws ParseException
 	 * @throws GeneralSecurityException
 	 * @throws IOException
+	 * @throws MessagingException 
 	 */
 	@RequestMapping("/insertslots")
 	@ResponseBody
@@ -295,12 +378,12 @@ public class SpringBootJdbcController {
 				System.err.println("GMT");
 			}
 			if (StringUtils.isNotBlank(filterArr[2])){ // time_zone, Dont add to slots list, in case not matching filter criteria
-					if(!StringUtils.equalsIgnoreCase(filterArr[2].trim(), tz_Tmp.trim()) && !(StringUtils.equalsIgnoreCase(filterArr[2].trim(), "ANY") || StringUtils.equalsIgnoreCase(filterArr[2].trim(), "ALL")))
+					if(!StringUtils.equalsIgnoreCase(filterArr[2].trim(), tz_Tmp.trim()) && !StringUtils.equalsIgnoreCase(filterArr[2].trim(), "ANY") && !StringUtils.equalsIgnoreCase(filterArr[2].trim(), "ALL"))
 					continue;
 			}
 
 			if (StringUtils.isNotBlank(filterArr[3])) { //region, Dont add to slots list, in case not matching filter criteria
-					if(!StringUtils.equalsIgnoreCase(filterArr[3].trim(), region_tmp.trim()) && !(StringUtils.equalsIgnoreCase(filterArr[3].trim(), "ANY") || StringUtils.equalsIgnoreCase(filterArr[3].trim(), "ALL")))
+					if(!StringUtils.equalsIgnoreCase(filterArr[3].trim(), region_tmp.trim()) && !StringUtils.equalsIgnoreCase(filterArr[3].trim(), "ANY") && !StringUtils.equalsIgnoreCase(filterArr[3].trim(), "ALL"))
 				continue;
 			}
 			
@@ -403,108 +486,190 @@ public class SpringBootJdbcController {
 	 * @throws IOException
 	 * @throws GeneralSecurityException
 	 */
-	@RequestMapping("/createEvent")
-	@ResponseBody
-	public String createEvent(String startDateTimeStr, String endDateTimeStr, String timeZone, String[] emailArr,
-			int requestId) throws IOException, GeneralSecurityException {
 
-		final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-		Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-				.setApplicationName(APPLICATION_NAME).build();
+	public String createEvent(String startDateTimeStr, String endDateTimeStr, String timeZone, String[] emailArr, int requestId) throws IOException, GeneralSecurityException {
+	    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+	    Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+	        .setApplicationName(APPLICATION_NAME).build();
 
-		Event event = new Event().setSummary(SUMMARY).setLocation(LOCATION).setDescription(DESCRIPTION);
+	    Event event = new Event().setSummary(SUMMARY).setLocation(LOCATION).setDescription(DESCRIPTION);
 
-		/**
-		 * DateTime startDateTime = new DateTime("2015-05-28T09:00:00-07:00");
-		 * EventDateTime start = new EventDateTime() .setDateTime(startDateTime)
-		 * .setTimeZone("America/Los_Angeles"); event.setStart(start);
-		 * 
-		 * DateTime endDateTime = new DateTime("2015-05-28T17:00:00-07:00");
-		 * EventDateTime end = new EventDateTime() .setDateTime(endDateTime)
-		 * .setTimeZone("America/Los_Angeles");
-		 */
+	    DateTime startDateTime = new DateTime(startDateTimeStr);
+	    EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone(timeZone);
+	    event.setStart(start);
 
-		DateTime startDateTime = new DateTime(startDateTimeStr);
-		EventDateTime start = new EventDateTime().setDateTime(startDateTime).setTimeZone(timeZone);
-		event.setStart(start);
+	    DateTime endDateTime = new DateTime(endDateTimeStr);
+	    EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone(timeZone);
+	    event.setEnd(end);
 
-		DateTime endDateTime = new DateTime(endDateTimeStr);
-		EventDateTime end = new EventDateTime().setDateTime(endDateTime).setTimeZone(timeZone);
-		event.setEnd(end);
+	    String[] recurrence = new String[] { RECURRENTCE_RULE };
+	    event.setRecurrence(Arrays.asList(recurrence));
 
-		String[] recurrence = new String[] { RECURRENTCE_RULE };
-		event.setRecurrence(Arrays.asList(recurrence));
+	    ArrayList<EventAttendee> emailList = new ArrayList<EventAttendee>();
+	    for (String emailIdAttendee : emailArr) {
+	        emailList.add(new EventAttendee().setEmail(emailIdAttendee));
+	    }
+	    event.setAttendees(emailList);
 
-		ArrayList<EventAttendee> eMailList = new ArrayList<EventAttendee>();
-		ArrayList<EventAttendee> emailList = new ArrayList<EventAttendee>();
-		EventAttendee[] attendeesArr = new EventAttendee[] {};
-		for (String emailIdAttendee : emailArr) {
-			emailList.add(new EventAttendee().setEmail(emailIdAttendee));
-		}
-		/**
-		 * EventAttendee[] attendees = new EventAttendee[] { new
-		 * EventAttendee().setEmail("sbrin@example.com"), new
-		 * EventAttendee().setEmail("saurabh.gupta@hcl.com"), new
-		 * EventAttendee().setEmail("saurabh2204@yahoo.com"), };
-		 */
-		event.setAttendees(emailList);
+	    // Set up email notifications for the event attendees to be sent immediately
+	    EventReminder[] reminderOverrides = new EventReminder[] {
+	        new EventReminder().setMethod("email").setMinutes(0) // 0 minutes for immediate notification
+	    };
 
-		EventReminder[] reminderOverrides = new EventReminder[] {
-				new EventReminder().setMethod("email").setMinutes(24 * 60),
-				new EventReminder().setMethod("popup").setMinutes(10), };
-		Event.Reminders reminders = new Event.Reminders().setUseDefault(false)
-				.setOverrides(Arrays.asList(reminderOverrides));
-		event.setReminders(reminders);
+	    Event.Reminders reminders = new Event.Reminders()
+	        .setUseDefault(false)
+	        .setOverrides(Arrays.asList(reminderOverrides));
+	    event.setReminders(reminders);
 
-		// conferenceData.
-		ConferenceData conferenceData = new com.google.api.services.calendar.model.ConferenceData();
-		CreateConferenceRequest conferenceRequest = new CreateConferenceRequest();
-		ConferenceSolutionKey kk = new ConferenceSolutionKey().setType("hangoutsMeet");
-		ConferenceSolution conferenceSolution = new ConferenceSolution();
-		conferenceSolution.setKey(kk);
+	    // conferenceData.
+	    ConferenceData conferenceData = new com.google.api.services.calendar.model.ConferenceData();
+	    CreateConferenceRequest conferenceRequest = new CreateConferenceRequest();
+	    ConferenceSolutionKey kk = new ConferenceSolutionKey().setType("hangoutsMeet");
+	    ConferenceSolution conferenceSolution = new ConferenceSolution();
+	    conferenceSolution.setKey(kk);
 
-		conferenceRequest.setConferenceSolutionKey(kk);
-		conferenceRequest.setRequestId(requestId + "");
-		// conferenceRequest.setStatus(new ConferenceRequestStatus().set);
-		conferenceRequest.getStatus();
-		conferenceData.setCreateRequest(conferenceRequest);
+	    conferenceRequest.setConferenceSolutionKey(kk);
+	    conferenceRequest.setRequestId(requestId + "");
+	    conferenceData.setCreateRequest(conferenceRequest);
 
-		event.setConferenceData(conferenceData);
+	    event.setConferenceData(conferenceData);
 
-		event = service.events().insert(calendarId, event).setConferenceDataVersion(1).execute();
+	    event = service.events().insert(calendarId, event).setConferenceDataVersion(1).execute();
 
-//			service.events().patch(calendarId, event.getId(), event).execute();
+	    System.out.printf("Event created: %s\n", event.getHtmlLink());
+	    System.err.println("Google Meet created: %s\n" + event.getHangoutLink());
+	    
+	    sendEmailWithEventDetails(emailArr, event);
 
-		System.out.printf("Event created: %s\n", event.getHtmlLink());
-
-		// addAttachment(service, calendarId, event.getId());
-
-		// service.events().patch(calendarId, eid, event);
-		System.err.println("Goole Meet created: %s\n" + event.getHangoutLink());
-
-		return event.getHtmlLink();
-
+	    return event.getHtmlLink();
 	}
+
+	private void sendEmailWithEventDetails(String[] emailArr, Event event)
+			throws IOException, GeneralSecurityException {
+		Gmail gmailService = getGmailService(); // Implement this method to obtain Gmail API service
+
+	    // Compose the email to send to event attendees
+	    String emailMessage = "<html><body>";
+	    emailMessage += "<h2>You are invited to the event</h2>";
+	    emailMessage += "<p><b>Summary:</b> " + event.getSummary() + "</p>";
+	    emailMessage += "<p><b>Location:</b> " + event.getLocation() + "</p>";
+	    emailMessage += "<p><b>Description:</b> " + event.getDescription() + "</p>";
+	    emailMessage += "<p><b>Start Time:</b> " + formatDate(event.getStart().getDateTime()) + "</p>";
+	    emailMessage += "<p><b>End Time:</b> " + formatDate(event.getEnd().getDateTime()) + "</p>";
+	    emailMessage += "<p>See the attached calendar event for more details.</p>";
+	    emailMessage += "</body></html>";
+
+	    MimeMessage emailMimeMessage = createMimeMessage(senderEmail, emailArr, emailSubject, emailMessage);
+
+	    // Attach the calendar event
+	    byte[] icsFile = generateCalendarEventFile(event);
+	    try {
+			emailMimeMessage = attachCalendarEvent(emailMimeMessage, icsFile);
+		} catch (MessagingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	    // Send the email
+	    try {
+	        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	        emailMimeMessage.writeTo(buffer);
+
+	        Message message = new Message();
+	        message.setRaw(Base64.getUrlEncoder().encodeToString(buffer.toByteArray()));
+
+	        getGmailService().users().messages().send("me", message).execute();
+	    } catch (MessagingException | IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
+	private static byte[] generateCalendarEventFile(Event event) throws IOException {
+        ICalendar ical = new ICalendar();
+
+        VEvent vEvent = new VEvent();
+
+     // Convert DateTime objects to java.util.Date
+     Date startDate = new Date(event.getStart().getDateTime().getValue());
+     Date endDate = new Date(event.getEnd().getDateTime().getValue());
+
+     vEvent.setDateStart(new DateStart(startDate));
+     vEvent.setDateEnd(new DateEnd(endDate));
+
+     // Add the event to an iCalendar
+
+        ical.addEvent(vEvent);
+
+        File tempFile = File.createTempFile("event-", ".ics");
+        Biweekly.write(ical).go(tempFile);
+
+        byte[] icsBytes = new byte[(int) tempFile.length()];
+        try (FileInputStream fileInputStream = new FileInputStream(tempFile)) {
+            fileInputStream.read(icsBytes);
+        }
+
+        return icsBytes;
+    }
+	
+	// Helper method to format DateTime to a readable format
+	private String formatDate(DateTime dateTime) {
+	    if (dateTime != null) {
+	        Date date = new Date(dateTime.getValue());
+	        DateFormat dateFormat = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z");
+	        return dateFormat.format(date);
+	    }
+	    return "";
+	}
+
+
+	// Helper method to attach the calendar event to the email
+	private MimeMessage attachCalendarEvent(MimeMessage mimeMessage, byte[] icsFile) throws MessagingException {
+	    MimeBodyPart attachmentPart = new MimeBodyPart();
+	    ByteArrayDataSource dataSource = new ByteArrayDataSource(icsFile, "text/calendar;method=REQUEST;name=event.ics");
+	    attachmentPart.setDataHandler(new DataHandler(dataSource));
+	    attachmentPart.setFileName("event.ics");
+
+	    MimeMultipart multipart = new MimeMultipart();
+	    multipart.addBodyPart(attachmentPart);
+
+	    mimeMessage.setContent(multipart);
+	    return mimeMessage;
+	}
+	
+	// Obtain Gmail API service with OAuth 2.0 credentials
+	public Gmail getGmailService() throws IOException, GeneralSecurityException {
+	    final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+	    return new Gmail.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+	        .setApplicationName(APPLICATION_NAME)
+	        .build();
+	}
+	
 
 	private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
-		// Load client secrets.
-		InputStream in = SpringBootJdbcController.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
-		if (in == null) {
-			throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-		}
-		GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+	    // Load client secrets.
+	    InputStream in = SpringBootJdbcController.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
+	    if (in == null) {
+	        throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
+	    }
+	    GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
-		// Build flow and trigger user authorization request.
-		GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
-				clientSecrets, SCOPES)
-				.setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
-				.setAccessType("offline").build();
-		LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
-		Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
-		// returns an authorized Credential object.
-		return credential;
+	    // Modify the existing scopes to include "https://www.googleapis.com/auth/gmail.compose"
+	    List<String> updatedScopes = new ArrayList<>(SCOPES);
+	    updatedScopes.add(GmailScopes.GMAIL_COMPOSE);
+
+	    // Build flow and trigger user authorization request with the updated scopes.
+	    GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(HTTP_TRANSPORT, JSON_FACTORY,
+	            clientSecrets, updatedScopes) // Use the updated scopes
+	            .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+	            .setAccessType("offline").build();
+	    LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+	    Credential credential = new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
+	    // Returns an authorized Credential object with the updated scope.
+	    return credential;
 	}
 
+	
+	
 	/**
 	 * @param slot_start
 	 * @param slots_end
@@ -546,6 +711,44 @@ public class SpringBootJdbcController {
 
 	}
 
+	public MimeMessage createMimeMessage(String senderEmail, String[] recipientEmails, String subject, String messageText)  {
+        // Set up the properties for the JavaMail session
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "false"); // Set to true if authentication is required
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com"); // Replace with your SMTP server
+        properties.put("mail.smtp.port", "587"); // Replace with the appropriate port for your SMTP server
 
+        // Create a Session with the properties
+        Session session = Session.getInstance(properties, null);
+
+        // Create a new MimeMessage
+        MimeMessage mimeMessage = new MimeMessage(session);
+
+        try {
+            // Set the sender (from) address
+            mimeMessage.setFrom(new InternetAddress(senderEmail));
+
+            // Set the recipient (to) addresses
+            for (String recipientEmail : recipientEmails) {
+                mimeMessage.addRecipient(MimeMessage.RecipientType.TO, new InternetAddress(recipientEmail));
+            }
+
+            // Set the subject of the email
+            mimeMessage.setSubject(subject);
+
+            // Set the content of the email (text)
+            mimeMessage.setText(messageText);
+
+            // You can also set the content of the email as HTML if needed:
+            // mimeMessage.setContent("<html><body>" + messageText + "</body></html>", "text/html");
+
+            return mimeMessage;
+        } catch (Exception e) {
+            // Handle or log any exceptions related to message creation
+            e.printStackTrace();
+        }
+		return mimeMessage;
+    }
 	
 }
