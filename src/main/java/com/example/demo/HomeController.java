@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -866,20 +867,33 @@ public class HomeController {
 	
 	@RequestMapping(value = "/slot-svc/slot/remove", method = RequestMethod.POST)
 	public String slotRemove(@RequestParam("slotIds") String slotIds, ModelMap model)
-	        throws ParseException, IOException, GeneralSecurityException {
+			throws ParseException, IOException, GeneralSecurityException {
 		// System.err.println(BASE_PATH_CLOUD);
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
 		getAllRegions();
-	    List<String> slotIdList = Arrays.asList(slotIds.split("\\s*,\\s*"));
-			msg = slotManagementService.deleteslots(slotIdList);
+		int startId, endId, totalCount, counter = 0;
+		List<String> slotIdList = new ArrayList<>();
+		if (StringUtils.contains(slotIds, "-")) {
+			startId = Integer.parseInt(StringUtils.substringBefore(slotIds, "-").trim());
+			endId = Integer.parseInt(StringUtils.substringAfter(slotIds, "-").trim());
+			totalCount = endId - startId;
+			while (counter <= totalCount) {
+				slotIdList.add(startId++ + "");
+				counter ++;
+			}
+
+		} else {
+
+			slotIdList = Arrays.asList(slotIds.split("\\s*,\\s*"));
+		}
+		msg = slotManagementService.deleteslots(slotIdList);
 
 		model.addAttribute("msg", msg);
 
 		return "remove_slot.html";
 
 	}
-
 	
 
 	private List<HashMap<String, Object>> getMapOfStringFormattedData(String data) {

@@ -605,11 +605,14 @@ tr:nth-child(even) {
 			 <input type="date" id="holiday_calendar" name="holiday_calendar" value="2022-08-22" class="narrow-input">
   -->
 
-            <label for="region"><b>Region</b></label>
-            <select class="narrow-input" id="region" name="region">
-								<option th:each="region : ${regions}" th:value="${region.name}"
-									th:text="${region.name}"></option>
-			</select>
+<label for="region"><b>Region</b></label>
+<select class="narrow-input" id="region" name="region">
+    <th:block th:each="region : ${regions}">   
+        <div th:if="${region.name != 'ALL'}">
+            <option th:value="${region.name}" th:text="${region.name}"></option>
+        </div>
+    </th:block>
+</select>
 
 			<label for="is_booked"><b>Auto book?</b></label>
 			<select id="is_booked" name="is_booked" class="narrow-input">

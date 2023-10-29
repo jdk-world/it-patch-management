@@ -556,33 +556,32 @@ regionSelect.addEventListener("change", function () {
     // Create an array to store selected time zones
     var selectedTimeZones = [];
 
-    if (selectedRegion === 'ALL') {
-        // Select 'ALL' in the time zone dropdown
-        timeZoneSelect.value = 'ALL';
-        // Show all time zone options
-        timeZoneOptions.forEach(function (option) {
-            option.style.display = "block";
-            selectedTimeZones.push(option.value); // Add all time zones to the array
-        });
-    } else {
-        // Clear the time_zone selection
-        timeZoneSelect.value = "";
-        // Filter and show the relevant time zone options
-        timeZoneOptions.forEach(function (option) {
-            var timeZoneValue = option.getAttribute("value");
-            if (timeZoneValue.includes(selectedRegion) || timeZoneValue === 'ALL') {
-                option.style.display = "block";
-                selectedTimeZones.push(option.value); // Add selected time zones to the array
-            } else {
-                option.style.display = "none";
-            }
-        });
+    // Remove 'ALL' option temporarily
+    var allOption = timeZoneSelect.querySelector("option[value='ALL']");
+    if (allOption) {
+        timeZoneSelect.removeChild(allOption);
+    }
 
-        // Find and select the first visible time zone option
-        var firstVisibleOption = timeZoneSelect.querySelector("option[value]:not([style*='display: none'])");
-        if (firstVisibleOption) {
-            firstVisibleOption.selected = true;
+    // Filter and show the relevant time zone options
+    timeZoneOptions.forEach(function (option) {
+        var timeZoneValue = option.getAttribute("value");
+        if (timeZoneValue.includes(selectedRegion) || timeZoneValue === 'ALL') {
+            option.style.display = "block";
+            selectedTimeZones.push(option.value); // Add selected time zones to the array
+        } else {
+            option.style.display = "none";
         }
+    });
+
+    // Add 'ALL' option to the end
+    if (allOption) {
+        timeZoneSelect.appendChild(allOption);
+    }
+
+    // Find and select the first visible time zone option
+    var firstVisibleOption = timeZoneSelect.querySelector("option[value]:not([style*='display: none'])");
+    if (firstVisibleOption) {
+        firstVisibleOption.selected = true;
     }
 
     // Set the selected time zones as a hidden input value in the form

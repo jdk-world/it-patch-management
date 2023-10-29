@@ -235,19 +235,17 @@ document.addEventListener("DOMContentLoaded", function () {
 <style>
 
 .chart-container {
-            width: 80%;
-            background: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
+    display: flex;
+    justify-content: space-between;
+    width: 80%;  /* Instead of 100% */
+}
 
-        .chart {
-            width: 100%;
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-
+.chart {
+    width: 45%; /* Adjust as needed to fit your design */
+    margin: 20px;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
         .chart:hover {
             transform: scale(1.1);
         }
@@ -291,10 +289,6 @@ document.addEventListener("DOMContentLoaded", function () {
     
 
 
-    .chart-half {
-        flex: 1;
-        margin: 20px;
-    }
 
     #pie-chart-container {
         width: 300px; /* Adjust to your desired width */
