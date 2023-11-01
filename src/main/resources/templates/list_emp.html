@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
+
+<title>User Management - Employee</title>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css"/>
+  
+
+
+<!--Export table button CSS-->
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+
+    <!-- Include DataTables CSS -->
+
+    <!-- Include DataTables JavaScript -->
 
 <meta charset="ISO-8859-1">
 <title>Employees</title>
-<script type="text/javascript"></script>
+
 
 <style>
   .pagination-container {
@@ -448,24 +479,7 @@ function filterForm() {
 </script>
 
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jQuery UI Dialog - Default functionality</title>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script>
-  $( function() {
-    $( "#dialog" ).dialog();
-  } );
-  </script>
 
-
-<script
-	src="https://apis.google.com/js/platform.js?onload=onLoadCallback"
-	async defer></script>
 </head>
 <body>
 
@@ -501,38 +515,42 @@ function filterForm() {
 
 	<!-- <center><img src="Patch_icon.png" alt="Patch Management"  width="300" height="200" align="middle">
 </center> -->
-	<br />
-	<table id="listOfEmployees" class="styled-table">
-		<thead>
-			<tr>
-						<th>Emp Id</th>
-						<th>Name</th>
-						<th>Region</th>
-						<!--  <th>Patch ID</th>
-						<th>Compliance</th>
-						<th>Completion Date</th>-->
-						<!-- <th>Applicability Status</th> -->
-						<th>E-Mail Id</th>
-			</tr>
-		</thead>
-		<tbody>
-<tr th:each="book, iStat : ${bookPage.content}"
-    th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
-    th:alt-title="${iStat.even}? 'even' : 'odd'">
-    <tr th:each="book, iStat : ${bookPage.content}">
+<table id="listOfEmployees" class="styled-table">
+    <thead>
+        <tr>
+            <th>Emp Id</th>
+            <th>Name</th>
+            <th>Region</th>
+            <th>E-Mail Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="book, iStat : ${bookPage.content}"
+            th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
+            th:alt-title="${iStat.even}? 'even' : 'odd'">
             <td th:text="${book.roll_no}">-</td>
             <td th:text="${book.emp_name}">-</td>
             <td th:text="${book.emp_region}">-</td>
-           <!--   <td th:text="${book.applicable_patch_id}">-</td>
-            <td th:text="${book.patch_compliance}">-</td>
-            <td th:text="${book.date_of_completion}">-</td> -->
             <td th:text="${book.e_mail_id}">-</td>
+        </tr>
+    </tbody>
+</table>
 
-            
-			
-			</tr>
-		</tbody>
-	</table>
+<script type="text/javascript">
+$(document).ready(function() {
+    var table = $('#listOfEmployees').DataTable({
+        'order': [], // Disable initial sorting
+        'rowsGroup': [2], // Group by the 'Region' column (change the index as needed)
+        'info': false // Disable the info element
+    });
+});
+</script>
+
+
+
+	
+
+
 	<br />
 <div class="pagination-container">
 
@@ -545,6 +563,9 @@ function filterForm() {
 		</div>
 	</center>
 	</div>
+	
+
+	
 	<!--     <div>
         <p>
             <a th:href="@{/}" th:text="#{msg.Home}"></a>
@@ -553,7 +574,6 @@ function filterForm() {
   -->
 
 
-	<div id="loaderid"></div>
 
 
 </body>

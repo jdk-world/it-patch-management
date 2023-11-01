@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Remove Admin</title>
+<title>User Management - Admin</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -597,25 +597,23 @@ tr:nth-child(even) {
 
 
 
-<div id="RemoveAdmin" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
+
+
+<div id="RemoveAdmin" class="tabContent box" style="display: block;">
     <div class="form-container">
-        <form action="#" th:action="@{/user-svc/admin/remove}" method="post" onload="myDate()">
-            <label for="roll_no"><b>Emp Id</b></label>
-            <input type="text" id="roll_no" name="roll_no" value="" class="narrow-input"><br>
+        <form action="#" th:action="@{/user-svc/admin/remove}" method="post">
+            <label for="id"><b>Admin Id(s)</b></label>
+            <input type="text" id="id" name="adminIds" class="narrow-input" placeholder="Enter Admin ID(s), separated by commas or dash"><br>
+            <!-- Use the name "slotIds" for the input field -->
 
- 
             <br/>
-            
-            
 
-            <input type="submit" value="Remove Admin">
+            <input type="submit" value="Delete Admin">
             <span th:text="${msg}" class="red"></span>
-
             <div id="helloid" class="loader"></div>
         </form>
     </div>
 </div>
-
 
 
 </body>

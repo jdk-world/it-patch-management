@@ -4,10 +4,57 @@
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
 <meta charset="ISO-8859-1">
-<title>Patch Catelog</title>
-<script type="text/javascript"></script>
+<title>Patch Management</title>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css"/>
+  
+
+
+<!--Export table button CSS-->
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+
+
+
+<script>
+function openPopup() {
+var popupOverlay = document.getElementById("popup-overlay");
+
+popupOverlay.className = ""; 
+	document.getElementById("popup-overlay").classList.add("box");
+}
+
+function closePopup() {
+	document.getElementById("popup-overlay").classList.add("hidden");
+}
+
+</script>
+
 
 <style>
+
+.hidden {
+    display: none;
+}
+
+
+.show-overlay {
+    display: block;
+        background-color: red; /* Set the background color as needed */
+    
+}
+
+
+.action-cell {
+    width: 10px; /* Set your preferred width */
+    height: 10px; /* Set your preferred height */
+}
+
   .pagination-container {
     position: fixed; /* Fixed position to keep it at the bottom */
     left: 0;
@@ -168,6 +215,7 @@
 	border-collapse: collapse;
 	margin-top: 20px;
 	border: 1px solid #ddd;
+    font-size: 14px; /* Adjust the font size as needed */	
 }
 
 /* Style table header */
@@ -366,39 +414,8 @@ button:disabled {
 	left: 40%;
 }
 
-/* Safari */
-@
--webkit-keyframes spin { 0% {
-	-webkit-transform: rotate(0deg);
-}
 
-100
-%
-{
--webkit-transform
-:
-rotate(
-360deg
-);
-}
-}
-@
-keyframes spin { 0% {
-	transform: rotate(0deg);
-}
-
-100
-%
-{
-transform
-:
-rotate(
-360deg
-);
-}
-}
 table {
-	font-family: arial, sans-serif;
 	border-collapse: collapse;
 	width: 100%;
 }
@@ -432,19 +449,6 @@ function filterForm() {
 </script>
 
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jQuery UI Dialog - Default functionality</title>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script>
-  $( function() {
-    $( "#dialog" ).dialog();
-  } );
-  </script>
 
 
 <script
@@ -486,8 +490,7 @@ function filterForm() {
 
 	<!-- <center><img src="Patch_icon.png" alt="Patch Management"  width="300" height="200" align="middle">
 </center> -->
-	<br />
-	<table id="listOfPatchCatelog" class="styled-table">
+<table id="listOfPatchCatelog" class="styled-table">
 		<thead>
 			<tr>
 						<th>Id</th>
@@ -497,16 +500,15 @@ function filterForm() {
 						<th>Release Date</th>
 						<th>Compliance Date</th>
 						<th>Application</th>
-						<!-- <th>Applicability Status</th> -->
-						<th>Compatibility</th>
-						<th>Active</th>
+						<th>Applicability</th>
+						<!-- <th>Compatibility</th> -->
+						<!-- <th>Active</th>-->
 			</tr>
 		</thead>
 		<tbody>
 <tr th:each="book, iStat : ${bookPage.content}"
     th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
-    th:alt-title="${iStat.even}? 'even' : 'odd'">
-    <tr th:each="book, iStat : ${bookPage.content}">
+    th:alt-title="${book.name}">
             <td th:text="${book.id}">-</td>
             <td th:text="${book.name}">-</td>
             <td th:text="${book.description}">-</td>
@@ -514,14 +516,49 @@ function filterForm() {
             <td th:text="${book.releaseDate}">-</td>
             <td th:text="${book.complianceDate}">-</td>
             <td th:text="${book.application}">-</td>
-            <!-- <td th:text="${book.applicabilityStatus}">-</td>-->
-            <td th:text="${book.compatibility}">-</td>
-            <td th:text="${book.isActive}">-</td>
+           <!--  <td th:text="${book.applicabilityStatus}">-</td>  -->
+<td>
+    <button th:id="${book.id}" th:if="${book.applicabilityStatus == 'self'}" onclick="window.location.href='/'" style="background-color: #B0E57C; color: #FFF; min-width: 95px; border: none;">Self</button>
+
+<button th:onclick="openPopup()" th:if="${book.applicabilityStatus == 'automated'}" id="automated-button" style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">Automated</button>
+
+    <button th:if="${book.applicabilityStatus == 'bookslot'}" th:onclick="'window.location.href = \'' + @{/user} + '\''">Book Slot</button>
+</td>
+
+            
+            <!-- <td th:text="${book.compatibility}">-</td> -->
+            <!-- <td th:text="${book.isActive}">-</td>-->
             
 			
 			</tr>
 		</tbody>
 	</table>
+	
+	
+<div id="popup-overlay" class="box hidden">
+        <h2>Automated Patch Installation</h2>
+        <p>Please select your preferred time for automated patch installation:</p>
+        <input type="datetime-local" id="preferred-time" required>
+        <p>Estimated time required: 30 minutes</p>
+        <p>Your machine (Hostname: <span id="hostname">User-PC</span>) will be used for the automated patch installation.</p>
+        <p>Patch Name: <span id="patch-name">Example Patch</span></p>
+        <button th:onclick="closePopup()">Close</button>
+        <p><span id="patch-name">Thanks!</span></p>
+
+        
+</div>
+
+	
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#listOfPatchCatelog').DataTable({
+            'order': [], // Disable initial sorting
+            'rowsGroup': [2], // Group by the 'Region' column (change the index as needed)
+            'lengthChange': true, // Enable the "Show entries" dropdown
+            'lengthMenu': [7, 10, 25, 50], // Set the options for "Show X entries" dropdown            
+        });
+    });
+</script>
 	<br />
 
 <div class="pagination-container">

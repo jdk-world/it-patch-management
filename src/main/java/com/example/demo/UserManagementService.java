@@ -130,11 +130,14 @@ public class UserManagementService {
 		return response;
 	}
 
-	public String removeEmp(Employee empModel) {
+
+
+	public String removeEmp(List<String> slotIdList) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Employee> request = new HttpEntity<>(empModel, headers);
+		HttpEntity<List<String>> request = new HttpEntity<>(slotIdList, headers);
+	    
 		String response = "";
 		try {
 
@@ -146,6 +149,8 @@ public class UserManagementService {
 		return response;
 	}
 
+	
+	
 	public String addAdmin(Admin empModel) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -194,11 +199,14 @@ public class UserManagementService {
 		return response;
 	}
 
-	public String removeAdmin(Admin empModel) {
+
+
+	public String removeAdmin(List<String> slotIdList) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Admin> request = new HttpEntity<>(empModel, headers);
+		HttpEntity<List<String>> request = new HttpEntity<>(slotIdList, headers);
+	    
 		String response = "";
 		try {
 
@@ -210,6 +218,9 @@ public class UserManagementService {
 		return response;
 	}
 
+	
+	
+	
 	public Page<Regions> findPaginatedRegion(Pageable pageable) {
 
 		HttpHeaders headers = new HttpHeaders();

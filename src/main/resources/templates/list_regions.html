@@ -1,11 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
+
+<title>User Management - Admin</title>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css"/>
+  
+
+
+<!--Export table button CSS-->
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css">
+
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+
+    <!-- Include DataTables CSS -->
+
+    <!-- Include DataTables JavaScript -->
+
 <meta charset="ISO-8859-1">
-<title>Regions</title>
-<script type="text/javascript"></script>
+<title>Employees</title>
+
 
 <style>
   .pagination-container {
@@ -46,6 +77,23 @@
     transition: background-color 0.3s;
 }
 
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007BFF; /* Set your desired background color */
+    color: #fff; /* Set your desired text color */
+    text-decoration: none;
+    border: 1px solid #007BFF; /* Set your desired border color */
+    border-radius: 5px; /* Adjust as needed for rounded corners */
+    cursor: pointer;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Adjust the hover background color as desired */
+    border: 1px solid #0056b3; /* Adjust the hover border color as desired */
+}
+
         .tabs {
             display: flex;
             margin-top: 20px;
@@ -60,8 +108,7 @@
             cursor: pointer;
             border: 1px solid #3498db;
             background-color: #f7f7f7;
-           white-space: nowrap; /* Prevent line breaks */
-            
+            white-space: nowrap; /* Prevent line breaks */
         }
 
         .tabContent {
@@ -432,26 +479,10 @@ function filterForm() {
 </script>
 
 
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>jQuery UI Dialog - Default functionality</title>
-<link rel="stylesheet"
-	href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script>
-  $( function() {
-    $( "#dialog" ).dialog();
-  } );
-  </script>
 
-
-<script
-	src="https://apis.google.com/js/platform.js?onload=onLoadCallback"
-	async defer></script>
 </head>
 <body>
+
 
 
 
@@ -496,7 +527,6 @@ function filterForm() {
 
 	<!-- <center><img src="Patch_icon.png" alt="Patch Management"  width="300" height="200" align="middle">
 </center> -->
-	<br />
 	<table id="listOfRoles" class="styled-table">
 		<thead>
 			<tr>
@@ -509,7 +539,6 @@ function filterForm() {
 <tr th:each="book, iStat : ${bookPage.content}"
     th:style="${iStat.odd}? 'background-color: #f2f2f2;' : 'background-color: white;'"
     th:alt-title="${iStat.even}? 'even' : 'odd'">
-    <tr th:each="book, iStat : ${bookPage.content}">
             <td th:text="${book.region_id}">-</td>
             <td th:text="${book.region_name}">-</td>
 
@@ -517,6 +546,16 @@ function filterForm() {
 			
 			</tr>
 		</tbody>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#listOfRoles').DataTable({
+            'order': [], // Disable initial sorting
+            'rowsGroup': [2], // Group by the 'Region' column (change the index as needed)
+            'lengthChange': true, // Enable the "Show entries" dropdown
+            'lengthMenu': [7, 10, 25, 50], // Set the options for "Show X entries" dropdown            
+        });
+    });
+</script>
 	</table>
 	<br />
 <div class="pagination-container">

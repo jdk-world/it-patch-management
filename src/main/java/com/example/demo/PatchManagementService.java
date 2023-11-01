@@ -100,15 +100,22 @@ public class PatchManagementService {
 		return response;
 	}
 
-	public String removePatch(Patch empModel) {
+	public String deleteslots(List<String> slotIdList) {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Patch> request = new HttpEntity<>(empModel, headers);
+		HttpEntity<List<String>> request = new HttpEntity<>(slotIdList, headers);
+	    
+		String response = "";
+		try {
 
-		// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
-		String response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/remove-patch", request,
-				String.class);
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+			response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/remove-patch", request, String.class);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		return response;
 	}
+	
+	
 }

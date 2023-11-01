@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Remove Patch</title>
+<title>Patch Management</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -562,20 +562,17 @@ tr:nth-child(even) {
 </div>	
 
 
-<div id="RemovePatch" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
+<div id="RemovePatch" class="tabContent box" style="display: block;">
     <div class="form-container">
-        <form action="#" th:action="@{/catelog-svc/patch/remove}" method="post" onload="myDate()">
-            <label for="id"><b>Patch Id</b></label>
-            <input type="text" id="id" name="id" value="" class="narrow-input"><br>
+        <form action="#" th:action="@{/catelog-svc/patch/remove}" method="post">
+            <label for="id"><b>Patch Id(s)</b></label>
+            <input type="text" id="id" name="patchIds" class="narrow-input" placeholder="Enter Patch ID(s), separated by commas or dash"><br>
+            <!-- Use the name "slotIds" for the input field -->
 
- 
             <br/>
-            
-            
 
-            <input type="submit" value="Remove Patch">
+            <input type="submit" value="Delete Patch">
             <span th:text="${msg}" class="red"></span>
-
             <div id="helloid" class="loader"></div>
         </form>
     </div>

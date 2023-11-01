@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Create Patch</title>
+<title>Patch Management</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -618,10 +618,6 @@ tr:nth-child(even) {
             <label for="compatibility"><b>Compatibility</b></label>
           	            <input type="text" id="compatibility" name="compatibility" value="" class="narrow-input"><br>
 
-
-            <br/>
-            
-            
 
             <input type="submit" value="Create Patch">
             <span th:text="${msg}" class="red"></span>

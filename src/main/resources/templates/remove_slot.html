@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Remove Slots</title>
+<title>Slot Management</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
@@ -566,20 +566,19 @@ tr:nth-child(even) {
     
 </div>
 
-<div id="RemovePatch" class="tabContent box" style="display: block;"> <!-- Modified the style here -->
+<div id="RemoveSlot" class="tabContent box" style="display: block;">
     <div class="form-container">
         <form action="#" th:action="@{/slot-svc/slot/remove}" method="post">
-		    <label for="id"><b>Slot Id(s)</b></label>
-		    <input type="text" id="id" name="slotIds" class="narrow-input"><br>
-		    <!-- Use the name "slotIds" for the input field -->
-		
-		    <br/>
-		    
-		    <input type="submit" value="Delete Slot">
-		    <span th:text="${msg}" class="red"></span>
-		    <div id="helloid" class="loader"></div>
-		</form>
+            <label for="id"><b>Slot Id(s)</b></label>
+            <input type="text" id="id" name="slotIds" class="narrow-input" placeholder="Enter slot ID(s), separated by commas or dash"><br>
+            <!-- Use the name "slotIds" for the input field -->
 
+            <br/>
+
+            <input type="submit" value="Delete Slot">
+            <span th:text="${msg}" class="red"></span>
+            <div id="helloid" class="loader"></div>
+        </form>
     </div>
 </div>
 

@@ -271,43 +271,37 @@ public class HomeController {
 		return "remove_admin.html";
 	}
 
+	
+	
 	@RequestMapping(value = "/user-svc/admin/remove", method = RequestMethod.POST)
-	public String removeAdmin(@ModelAttribute Admin patchModel, Model model)
+	public String removeAdmin(@RequestParam("adminIds") String slotIds, Model model)
 			throws ParseException, IOException, GeneralSecurityException {
 		// System.err.println(BASE_PATH_CLOUD);
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
-		/**
-		 * patchManagementService.createPatch(patchModel.getName(),
-		 * patchModel.getDescription(), patchModel.getVersion(),
-		 * patchModel.getReleaseDate(), patchModel.getComplianceDate(),
-		 * patchModel.getApplication(),
-		 * "Applicable",patchModel.getCompatibility(),patchModel.getIsActive());
-		 */
-		msg = userManagementService.removeAdmin(patchModel);
+		
+		List<String> slotIdList = new ArrayList<>();
+		if (StringUtils.contains(slotIds, "-")) {
+			slotIdList = extractedIds(slotIds);
+
+		} else {
+
+			slotIdList = Arrays.asList(slotIds.split("\\s*,\\s*"));
+		}
+		
+		msg = userManagementService.removeAdmin(slotIdList);
 
 		model.addAttribute("msg", msg);
-		Page<Admin> bookPage = userManagementService.findPaginatedAdmin(PageRequest.of(0, 10));
-
-		model.addAttribute("bookPage", bookPage);
-		model.addAttribute("filter_slot_start", filter_slot_start);
-		model.addAttribute("filter_slot_end", filter_slot_end);
-		model.addAttribute("checkedMarkForAvailableFilterCheckbox", checkedMarkForAvailableFilterCheckbox);
-
-		// boolean filter_is_booked_checkBox = !Boolean.valueOf(filter_is_booked) ;
-
-		int totalPages = bookPage.getTotalPages();
-		if (totalPages > 0) {
-			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-			model.addAttribute("pageNumbers", pageNumbers);
-		}
-
-		populateList(model);
-
-		return "list_admin.html";
+		
+		return "remove_admin.html";
 
 	}
 
+	
+	
+	
+	
+	
 	@RequestMapping(value = "/user-svc/emp/remove", method = RequestMethod.GET)
 	public String removeEmp(ModelMap model) {
 		// model.addAttribute("regions", getAllRegions());
@@ -317,43 +311,35 @@ public class HomeController {
 		return "remove_emp.html";
 	}
 
+
+	
+	
 	@RequestMapping(value = "/user-svc/emp/remove", method = RequestMethod.POST)
-	public String removeAdmin(@ModelAttribute Employee patchModel, Model model)
+	public String removeEmp(@RequestParam("empIds") String slotIds, Model model)
 			throws ParseException, IOException, GeneralSecurityException {
 		// System.err.println(BASE_PATH_CLOUD);
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
-		/**
-		 * patchManagementService.createPatch(patchModel.getName(),
-		 * patchModel.getDescription(), patchModel.getVersion(),
-		 * patchModel.getReleaseDate(), patchModel.getComplianceDate(),
-		 * patchModel.getApplication(),
-		 * "Applicable",patchModel.getCompatibility(),patchModel.getIsActive());
-		 */
-		msg = userManagementService.removeEmp(patchModel);
+		
+		List<String> slotIdList = new ArrayList<>();
+		if (StringUtils.contains(slotIds, "-")) {
+			slotIdList = extractedIds(slotIds);
+
+		} else {
+
+			slotIdList = Arrays.asList(slotIds.split("\\s*,\\s*"));
+		}
+		
+		msg = userManagementService.removeEmp(slotIdList);
 
 		model.addAttribute("msg", msg);
-		Page<Admin> bookPage = userManagementService.findPaginatedAdmin(PageRequest.of(0, 10));
-
-		model.addAttribute("bookPage", bookPage);
-		model.addAttribute("filter_slot_start", filter_slot_start);
-		model.addAttribute("filter_slot_end", filter_slot_end);
-		model.addAttribute("checkedMarkForAvailableFilterCheckbox", checkedMarkForAvailableFilterCheckbox);
-
-		// boolean filter_is_booked_checkBox = !Boolean.valueOf(filter_is_booked) ;
-
-		int totalPages = bookPage.getTotalPages();
-		if (totalPages > 0) {
-			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-			model.addAttribute("pageNumbers", pageNumbers);
-		}
-
-		populateList(model);
-
-		return "list_emp.html";
+		
+		return "remove_emp.html";
 
 	}
 
+	
+	
 	@RequestMapping(value = "/user-svc/admin/add-role", method = RequestMethod.GET)
 	public String addRole(ModelMap model) {
 		// model.addAttribute("regions", getAllRegions());
@@ -450,7 +436,7 @@ public class HomeController {
 	public String listRegions(Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
 		int currentPage = page.orElse(1);
-		int pageSize = size.orElse(7);
+		int pageSize = size.orElse(8);
 		String[] filterArr;
 
 		if (passedfromPostFlag) {
@@ -563,7 +549,7 @@ public class HomeController {
 	public String listCatelog(Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
 		int currentPage = page.orElse(1);
-		int pageSize = size.orElse(6);
+		int pageSize = size.orElse(7);
 		String[] filterArr;
 
 		Page<Patch> bookPage = patchManagementService.findPaginatedCatelog(PageRequest.of(currentPage - 1, pageSize));
@@ -587,40 +573,29 @@ public class HomeController {
 		return "patch_catelog.html";
 	}
 
+	
+	
 	@RequestMapping(value = "/catelog-svc/patch/remove", method = RequestMethod.POST)
-	public String removeAdmin(@ModelAttribute Patch patchModel, Model model)
+	public String removePatch(@RequestParam("patchIds") String slotIds, Model model)
 			throws ParseException, IOException, GeneralSecurityException {
 		// System.err.println(BASE_PATH_CLOUD);
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
-		/**
-		 * patchManagementService.createPatch(patchModel.getName(),
-		 * patchModel.getDescription(), patchModel.getVersion(),
-		 * patchModel.getReleaseDate(), patchModel.getComplianceDate(),
-		 * patchModel.getApplication(),
-		 * "Applicable",patchModel.getCompatibility(),patchModel.getIsActive());
-		 */
-		msg = patchManagementService.removePatch(patchModel);
+		
+		List<String> slotIdList = new ArrayList<>();
+		if (StringUtils.contains(slotIds, "-")) {
+			slotIdList = extractedIds(slotIds);
+
+		} else {
+
+			slotIdList = Arrays.asList(slotIds.split("\\s*,\\s*"));
+		}
+		
+		msg = patchManagementService.deleteslots(slotIdList);
 
 		model.addAttribute("msg", msg);
-		Page<Patch> bookPage = patchManagementService.findPaginatedCatelog(PageRequest.of(0, 10));
-
-		model.addAttribute("bookPage", bookPage);
-		model.addAttribute("filter_slot_start", filter_slot_start);
-		model.addAttribute("filter_slot_end", filter_slot_end);
-		model.addAttribute("checkedMarkForAvailableFilterCheckbox", checkedMarkForAvailableFilterCheckbox);
-
-		// boolean filter_is_booked_checkBox = !Boolean.valueOf(filter_is_booked) ;
-
-		int totalPages = bookPage.getTotalPages();
-		if (totalPages > 0) {
-			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
-			model.addAttribute("pageNumbers", pageNumbers);
-		}
-
-		populateList(model);
-
-		return "patch_catelog.html";
+		
+		return "remove_patch.html";
 
 	}
 
@@ -872,16 +847,9 @@ public class HomeController {
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
 		getAllRegions();
-		int startId, endId, totalCount, counter = 0;
 		List<String> slotIdList = new ArrayList<>();
 		if (StringUtils.contains(slotIds, "-")) {
-			startId = Integer.parseInt(StringUtils.substringBefore(slotIds, "-").trim());
-			endId = Integer.parseInt(StringUtils.substringAfter(slotIds, "-").trim());
-			totalCount = endId - startId;
-			while (counter <= totalCount) {
-				slotIdList.add(startId++ + "");
-				counter ++;
-			}
+			slotIdList = extractedIds(slotIds);
 
 		} else {
 
@@ -893,6 +861,23 @@ public class HomeController {
 
 		return "remove_slot.html";
 
+	}
+
+	private List<String> extractedIds(String slotIds) {
+		int startId;
+		int endId;
+		int totalCount;
+		int counter = 0;
+
+		ArrayList<String> slotIdList = new ArrayList<>();
+		startId = Integer.parseInt(StringUtils.substringBefore(slotIds, "-").trim());
+		endId = Integer.parseInt(StringUtils.substringAfter(slotIds, "-").trim());
+		totalCount = endId - startId;
+		while (counter <= totalCount) {
+			slotIdList.add(startId++ + "");
+			counter ++;
+		}
+		return slotIdList;
 	}
 	
 
