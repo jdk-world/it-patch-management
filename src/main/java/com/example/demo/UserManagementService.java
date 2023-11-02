@@ -4,7 +4,9 @@ import java.awt.print.Book;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.apache.commons.lang.BooleanUtils;
@@ -147,6 +149,26 @@ public class UserManagementService {
 			// TODO: handle exception
 		}
 		return response;
+	}
+
+
+	public HashMap<Integer, String> getAllEmpAssetMap() {
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HashMap<Integer, String> books = new HashMap<Integer, String>();
+
+		try {
+
+			// HttpEntity<Patch> request = new HttpEntity<>(patchModel);
+
+			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/emp-asset", HashMap.class);
+
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return books;
 	}
 
 	

@@ -164,7 +164,7 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/user-svc/emp/add", method = RequestMethod.POST)
-	public String addEmp(@ModelAttribute Employee patchModel, ModelMap model)
+	public String addEmp(@ModelAttribute Employee patchModel, Model model)
 			throws ParseException, IOException, GeneralSecurityException {
 		// System.err.println(BASE_PATH_CLOUD);
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
@@ -179,8 +179,9 @@ public class HomeController {
 		msg = userManagementService.addEmp(patchModel);
 
 		model.addAttribute("msg", msg);
+		populateList(model);
 
-		return "list_emp.html";
+		return "add_emp.html";
 
 	}
 
@@ -249,7 +250,9 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/user-svc/emp/add", method = RequestMethod.GET)
-	public String addEmp() {
+	public String addEmp(Model model) {
+		populateList(model);
+
 		return "add_emp.html";
 	}
 
@@ -542,7 +545,19 @@ public class HomeController {
 		return new ResponseEntity(HttpStatus.OK);
 
 	}
+	@RequestMapping(value = "/catelog-svc/create-patch-request", method = RequestMethod.POST)
+	public ResponseEntity bookPatchingRequest(
+	        @RequestParam String patchName,
+	        @RequestParam String hostName,
+	        @RequestParam String empId,
+	        @RequestParam String preferredTime) {
+	    
+		PatchingRequest patchingRequest = new PatchingRequest(patchName, hostName, empId, preferredTime);
+		System.err.println("patchingRequest");
+		String eventLink = springBootJdbcController.createPatchingRequest(patchingRequest);	   
 
+	    return new ResponseEntity(HttpStatus.OK);
+	}
 
 
 	@GetMapping({ "/catelog-svc/patch" })
@@ -634,7 +649,52 @@ public class HomeController {
 
 		return "remove_patch.html";
 	}
+	
+	@RequestMapping(value = "/catelog-svc/patch/tag", method = RequestMethod.GET)
+	public String tagPatch(ModelMap model) {
+		// model.addAttribute("regions", getAllRegions());
 
+		// model.addAttribute("org_roles", getAllOrgRoles());
+
+		return "tag_patch.html";
+	}
+
+	@RequestMapping(value = "/catelog-svc/patch/tag", method = RequestMethod.POST)
+	public String tagPatch(@RequestParam("patchIds") String patchIds, @RequestParam("empIds") String empIds, Model model)
+			throws ParseException, IOException, GeneralSecurityException {
+		// System.err.println(BASE_PATH_CLOUD);
+		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
+		msg = "";
+		
+		List<String> patchIdsList = new ArrayList<>();
+		if (StringUtils.contains(patchIds, "-")) {
+			patchIdsList = extractedIds(patchIds);
+
+		} else {
+
+			patchIdsList = Arrays.asList(patchIds.split("\\s*,\\s*"));
+		}
+		
+		List<String> empIdsList = new ArrayList<>();
+		if (StringUtils.contains(empIds, "-")) {
+			empIdsList = extractedIds(empIds);
+
+		} else {
+
+			empIdsList = Arrays.asList(empIds.split("\\s*,\\s*"));
+		}
+		
+		
+		TagRequest tagPatchObj = new TagRequest(patchIdsList, empIdsList);
+		
+		msg = patchManagementService.tagPatchsToEmps(tagPatchObj);
+
+		model.addAttribute("msg", msg);
+		
+		return "tag_patch.html";
+
+	}
+	
 	@GetMapping({ "/user-svc/emp" })
 	public String listEmp(Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
@@ -663,6 +723,14 @@ public class HomeController {
 		return "list_emp.html";
 	}
 
+	
+    
+    @GetMapping("/user-svc/emp-asset")
+    public HashMap<Integer, String> getEmpAsset() {
+        return userManagementService.getAllEmpAssetMap();
+    }
+    
+    
 	@GetMapping({ "/compliance-svc", "/compliance-svc/filter" })
 	public String compFilter(Model model, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size) {
@@ -1158,6 +1226,9 @@ public class HomeController {
 		model.addAttribute("options", new LinkedHashSet<>(timeZonesList));
 		model.addAttribute("regions", new LinkedHashSet<>(regions));
 		model.addAttribute("patches", getAllPatches());
+		model.addAttribute("empAssets", getEmpAsset());
+
+		
 
 	}
 

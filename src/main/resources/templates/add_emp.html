@@ -598,14 +598,19 @@ tr:nth-child(even) {
             <input type="text" id="roll_no" name="roll_no" value="" class="narrow-input"><br>
 
             <label for="emp_name"><b>Name</b></label>
-            <input type="text" id="emp_name" name="emp_name" value="" class="narrow-input"><br>
-
-            <label for="emp_region"><b>Region</b></label>
-            <input type="text" id="emp_region" name="emp_region" value="" class="narrow-input"><br>
-
-            <label for="e_mail_id"><b>E-mail Id</b></label>
+            <input type="text" id="emp_name" name="emp_name" value="" class="narrow-input"><br> 
+            
+            <label for="emp_region"><b>Region</b></label> 
+            	<select id="emp_region" name="emp_region" class="narrow-input">
+					<option th:each="region : ${regions}" th:value="${region}"
+						th:text="${region}" th:unless="${region == 'ALL'}"></option>
+				</select> 
+				
+				<label for="e_mail_id"><b>E-mail Id</b></label>	
             <input type="text" id="e_mail_id" name="e_mail_id" value="" class="narrow-input"><br>
 
+            <label for="e_mail_id"><b>Hostname</b></label>
+            <input type="text" id="host_name" name="host_name" value="" class="narrow-input"><br>
  
             <br/>
             

@@ -22,16 +22,65 @@
 
 
 <script>
-function openPopup() {
-var popupOverlay = document.getElementById("popup-overlay");
+var selectedPatchName = "";
 
-popupOverlay.className = ""; 
-	document.getElementById("popup-overlay").classList.add("box");
+function openPopup() {
+	var popupOverlay = document.getElementById("popup-overlay");
+	var popupOverlay = document.getElementById("popup-overlay");
+	var automatedButton = document.getElementById("automated-button");
+	var selectedPatchName = automatedButton.getAttribute("data-patch-name");
+	
+	document.getElementById("patch-name").textContent = selectedPatchName;
+	
+	popupOverlay.className = ""; 
+		document.getElementById("popup-overlay").classList.add("box");
 }
 
 function closePopup() {
 	document.getElementById("popup-overlay").classList.add("hidden");
 }
+
+function submitPatchRequest() {
+	var popupOverlay = document.getElementById("popup-overlay");
+	var popupOverlay = document.getElementById("popup-overlay");
+	var automatedButton = document.getElementById("automated-button");
+	var selectedPatchName = automatedButton.getAttribute("data-patch-name");
+   // var hostName = "${empAssets['1']}"; // Use this value in other places as well
+    var hostName = "LP TEST"; // Use this value in other places as well
+    var link = /*[[@{/bookslot-and-create-event}]]*/ 'create-patch-request';
+
+    var preferredTime = document.getElementById("preferred-time").value;
+
+    
+    var data = "patchName=" + selectedPatchName+ "&hostName=" +hostName+ "&empId=1" + "&preferredTime=" + preferredTime;
+	//alert('data'+data);
+
+    // Get the selected time from the input
+
+
+if (data != null) {
+
+    $.ajax({
+     type: "post",
+     url: link,
+     cache: false,    
+	 data : data,
+     success: function(response){
+    	 document.getElementById("msg").innerHTML = "Automated Patch request created Successfully for <b>" + selectedPatchName + "</b> for the requested time!";
+ 	    //document.getElementById("result").className  = ""; 
+ 	    document.getElementById("msg").style.color = "red";
+ 	   // document.getElementById(id).disabled = "true";
+
+     },
+     error: function(){      
+      alert('Error while request..');
+     }
+    });
+
+   // madeAjaxCall3();
+}
+}
+
 
 </script>
 
@@ -485,6 +534,7 @@ function filterForm() {
     <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch} + '\''">Patch Catalog</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/create} + '\''">Create Patch</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/tag} + '\''">Tag Patch</div>
     
 </div>	
 
@@ -520,7 +570,7 @@ function filterForm() {
 <td>
     <button th:id="${book.id}" th:if="${book.applicabilityStatus == 'self'}" onclick="window.location.href='/'" style="background-color: #B0E57C; color: #FFF; min-width: 95px; border: none;">Self</button>
 
-<button th:onclick="openPopup()" th:if="${book.applicabilityStatus == 'automated'}" id="automated-button" style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">Automated</button>
+<button th:attr="data-patch-name=${book.name}" th:onclick="openPopup()" th:if="${book.applicabilityStatus == 'automated'}" id="automated-button" style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">Automated</button>
 
     <button th:if="${book.applicabilityStatus == 'bookslot'}" th:onclick="'window.location.href = \'' + @{/user} + '\''">Book Slot</button>
 </td>
@@ -536,16 +586,26 @@ function filterForm() {
 	
 	
 <div id="popup-overlay" class="box hidden">
-        <h2>Automated Patch Installation</h2>
-        <p>Please select your preferred time for automated patch installation:</p>
-        <input type="datetime-local" id="preferred-time" required>
-        <p>Estimated time required: 30 minutes</p>
-        <p>Your machine (Hostname: <span id="hostname">User-PC</span>) will be used for the automated patch installation.</p>
-        <p>Patch Name: <span id="patch-name">Example Patch</span></p>
-        <button th:onclick="closePopup()">Close</button>
-        <p><span id="patch-name">Thanks!</span></p>
-
-        
+    <h2>Automated Patch Installation</h2>
+    <p>Please select your preferred time for automated patch installation:</p>
+    <input type="datetime-local" id="preferred-time" required>
+    <p>Estimated time required: 30 minutes</p>
+    <p th:if="${empAssets != null and empAssets['1'] != null}">
+        Your machine (Hostname: <span id="hostname" th:text="${empAssets['1']}">User-PC</span>) will be used for the automated patch installation.
+    </p>
+    <p>Patch Name: <span id="patch-name">Example Patch</span></p>
+    
+        <span th:id="'msg'"></span>
+    
+ <div class="center-box">
+        <div class="button-container">
+            <button th:onclick="submitPatchRequest()" class="button-form">Submit Request</button>
+            <span style="margin: 0 10px;"></span> <!-- Add spacing between buttons -->
+            <button th:onclick="closePopup()" class="button-form">Close</button>
+        </div>
+    </div>
+    
+    
 </div>
 
 	

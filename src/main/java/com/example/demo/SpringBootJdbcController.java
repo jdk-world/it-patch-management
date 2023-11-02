@@ -168,7 +168,10 @@ public class SpringBootJdbcController {
 	private static final String DAY_SLOT_END_TIME = "17:00";
 	private static final String SCOPE_IDENTITY_QUERY = "SELECT SCOPE_IDENTITY()";
 	private static String emailSubject = "Event Invitation: IT Patch Management";
+	private static String emailPatchingRequestSubject = "Automated Patching Request Notification";
+
 	private static final String senderEmail = "saurabh2204@gmail.com";
+	private static final String DEFAULT_RECIPIENT_EMAIL = "saurabh2204@gmail.com";
 
 	
 	
@@ -750,5 +753,76 @@ public class SpringBootJdbcController {
         }
 		return mimeMessage;
     }
+
+	public String createPatchingRequest(PatchingRequest patchingRequest) {
+		try {
+			sendEmailWithPatchingDetails(patchingRequest);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
+	private void sendEmailWithPatchingDetails(PatchingRequest patchingRequest)
+			throws IOException, GeneralSecurityException {
+		
+		String sql2 = "SELECT asset_id FROM springbootdb.EMPLOYEE_ASSET WHERE roll_no = ?";
+		String assetId = jdbc.queryForObject(sql2, String.class, patchingRequest.getEmpId());
+		patchingRequest.setHostName(assetId);
+		
+		
+		String sql = "SELECT DISTINCT e_mail_id FROM Employee WHERE roll_no="+patchingRequest.getEmpId()+";";
+
+		List<Map<String, Object>> rows = jdbc.queryForList(sql);
+		ArrayList<String> emailList = new ArrayList<String>();
+		emailList.add(DEFAULT_RECIPIENT_EMAIL);
+		int i=0;
+		
+		for (Map row : rows) {
+
+			emailList.add(row.get("e_mail_id").toString());
+		
+		}
+		
+		String[] emailArr = emailList.toArray(new String[emailList.size()]);		
+		System.err.println(emailArr);
+
+	
+		Gmail gmailService = getGmailService(); // Implement this method to obtain Gmail API service
+
+		String emailMessage = "<html><body>";
+		emailMessage += "<h2>Your automated patching request is created</h2>";
+		emailMessage += "<p><b>Hostname:</b> " + patchingRequest.getHostName() + "</p>";
+		emailMessage += "<p><b>Patch Name:</b> " + patchingRequest.getPatchName() + "</p>";
+		emailMessage += "<p><b>Selected Time:</b> " + patchingRequest.getPreferredTime() + "</p>";
+		emailMessage += "</body></html>";
+
+		MimeMessage emailMimeMessage = createMimeMessage(senderEmail, emailArr, emailPatchingRequestSubject, emailMessage);
+		try {
+			emailMimeMessage.setContent(emailMessage, "text/html");
+		} catch (MessagingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+	    // Attach the calendar event
+	   
+	    // Send the email
+	    try {
+	        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+	        emailMimeMessage.writeTo(buffer);
+
+	        Message message = new Message();
+	        message.setRaw(Base64.getUrlEncoder().encodeToString(buffer.toByteArray()));
+
+	        getGmailService().users().messages().send("me", message).execute();
+	    } catch (MessagingException | IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 }

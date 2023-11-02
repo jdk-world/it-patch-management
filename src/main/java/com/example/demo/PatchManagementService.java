@@ -116,6 +116,20 @@ public class PatchManagementService {
 		}
 		return response;
 	}
-	
+
+	public String tagPatchsToEmps(TagRequest tagRequest) {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<TagRequest> request = new HttpEntity<>(tagRequest, headers);
+
+	    String response = "";
+	    try {
+	        response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/tag", request, String.class);
+	    } catch (Exception e) {
+	        // Handle exceptions
+	    }
+	    return response;
+	}
+
 	
 }
