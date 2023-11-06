@@ -88,6 +88,42 @@ public class PatchManagementService {
 
 	}
 
+	public List<Patch> findUnPaginatedCatelog() {
+
+		// List<Book> books = BookUtils.buildBooks();
+		// List<Patch> books = springBootJdbcController.findAllSlots(filterArr);
+
+		// List<Patch> books = (List<Patch>)
+		// restTemplate.getForObject("http://localhost:8081/api/patchcatelog",
+		// Patch.class);
+		// HttpHeaders headers = new HttpHeaders();
+		// HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+
+		// Create an HTTP request headers object.
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		// Create an HTTP request entity object.
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		List<Patch> books = new ArrayList<Patch>();
+		try {
+
+			HttpEntity<String> response = restTemplate.getForEntity(PATCH_MGMT_SERVICE_BASE_URL + "/catelog",
+					String.class);
+			System.err.println("hello");
+			books = restTemplate.getForObject(PATCH_MGMT_SERVICE_BASE_URL + "/catelog", List.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
+		
+
+		return books;
+
+	}
+
+	
 	public String createPatch(Patch patchModel) {
 
 		HttpHeaders headers = new HttpHeaders();
@@ -131,5 +167,18 @@ public class PatchManagementService {
 	    return response;
 	}
 
+	public String untagPatchsToEmps(TagRequest tagRequest) {
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_JSON);
+	    HttpEntity<TagRequest> request = new HttpEntity<>(tagRequest, headers);
+
+	    String response = "";
+	    try {
+	        response = restTemplate.postForObject(PATCH_MGMT_SERVICE_BASE_URL + "/untag", request, String.class);
+	    } catch (Exception e) {
+	        // Handle exceptions
+	    }
+	    return response;
+	}
 	
 }

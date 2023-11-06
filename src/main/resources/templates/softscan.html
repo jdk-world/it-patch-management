@@ -71,8 +71,7 @@
     <title>IT Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-    
-
+ 
 .info-link {
     font-size: 14px;
     font-weight: bold;
@@ -141,8 +140,7 @@
     white-space: nowrap;
     margin-left: 850px; /* Add margin to shift right */  
     margin-top: 70px; /* Adjust margin for downward shift */       
-}  
-    
+}
  /* Apply the "narrow-input" class to the select element to reduce width */
 .form-container select.narrow-input {
     width: 51.5%; /* Adjust the width as needed */
@@ -207,6 +205,25 @@
     margin-left: 20px;
 }
 
+       .instructions {
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+        }
+        .download-button {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
+            border-radius: 5px;
+        }
+        .download-button:hover {
+            background-color: #0056b3;
+        }
 .menu-link {
     text-decoration: none;
     color: #333;
@@ -624,11 +641,10 @@ tr:nth-child(even) {
         </ul>
     </div>
 		<br />
-	
  <div class="tabs">
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch} + '\''">Patch Catalog</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/create} + '\''">Create Patch</div>
-    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/tag} + '\''">Tag Patch
         <span class="info-link">i</span>
     </div>
@@ -637,24 +653,26 @@ tr:nth-child(even) {
         <span class="info-link1">i</span>
     </div>
 
-    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/softscan} + '\''">Softscan</div>
+    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/softscan} + '\''">Softscan</div>
     
 </div>	
 
 
+
 <div id="RemovePatch" class="tabContent box" style="display: block;">
     <div class="form-container">
-        <form action="#" th:action="@{/catelog-svc/patch/remove}" method="post">
-            <label for="id"><b>Patch Id(s)</b></label>
-            <input type="text" id="id" name="patchIds" class="narrow-input" placeholder="Enter Patch ID(s), separated by commas or dash"><br>
-            <!-- Use the name "slotIds" for the input field -->
 
-            <br/>
-
-            <input type="submit" value="Delete Patch">
-            <span th:text="${msg}" class="red"></span>
-            <div id="helloid" class="loader"></div>
-        </form>
+        
+                <h2>Download SoftScan for Compliance Check</h2>
+        <p>To ensure your system's compliance, please follow these steps:</p>
+        <ol>
+            1 : Download and install the SoftScan software.<br/>
+            2 : Run the SoftScan tool on your machine.<br/>
+            3 : Generate a compliance report.<br/>
+        </ol>
+        <a class="download-button" href="https://tools.hcl.com/tool/softscan/SoftScan.zip" target="_blank" rel="noopener noreferrer">Download SoftScan</a>
+        
+        
     </div>
 </div>
 

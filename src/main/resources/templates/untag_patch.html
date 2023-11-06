@@ -2,71 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
-<title>Patch Management</title>
+<title>User Management - Admin</title>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
-    function myFunctionHol() {
-    	//alert('Hello');
-    	var number=document.getElementById("holiday_calendar").value;  
-	    //document.getElementById(holiday_calendar).disabled = "false";
-	   // document.getElementById(holiday_calendar).value;
-	   var val = 5; 
-    	//alert('Hello2' + number);
-    	
-    	var earlierValue=document.getElementById("demo1").innerHTML;
-    	//alert('hhello'+earlierValue);
-    	if (earlierValue === "") {
-    		document.getElementById("demo1").innerHTML = number;
-    	     // alert('Empty')
 
-    	}else {
-    	      document.getElementById("demo1").innerHTML = earlierValue+", "+number;
-    	    //  alert('value')
-
-    	}
-    	document.getElementById("holidays").value=document.getElementById("demo1").innerHTML;
-    }
-    
-    function myFunction() {
-            document.getElementById("helloid").style.display = "block";
-            document.getElementById("helloid").className = "loader";
-            
-        }
-
-        function myDate() {
-            n = new Date();
-            y = n.getFullYear();
-            m = n.getMonth() + 1;
-            d = n.getDate();
-
-            slot_start_val = y + "-" + m.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false }) + "-"
-                + d.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false }) + "T" + "09:00";
-            slot_end_val = y + "-" + m.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false }) + "-"
-                + d.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false }) + "T" + "10:00";
-
-            document.getElementById("slot_start").setAttribute("value", slot_start_val);
-            document.getElementById("slot_end").setAttribute("value", slot_end_val);
-            document.getElementById("slots_end").setAttribute("value", slot_end_val);
-            document.getElementById("slots_start").setAttribute("value", slot_start_val);
-
-
-        }
-
-        // JavaScript to handle tab switching
-        function openTab(tabName) {
-            var i, tabContent, tabLinks;
-            tabContent = document.getElementsByClassName("tabContent");
-            for (i = 0; i < tabContent.length; i++) {
-                tabContent[i].style.display = "none";
-            }
-            tabLinks = document.getElementsByClassName("tabLink");
-            for (i = 0; i < tabLinks.length; i++) {
-                tabLinks[i].className = tabLinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            event.currentTarget.className += " active";
-        }
     </script>
     <title>IT Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -141,8 +81,8 @@
     white-space: nowrap;
     margin-left: 850px; /* Add margin to shift right */  
     margin-top: 70px; /* Adjust margin for downward shift */       
-}  
-    
+}
+
  /* Apply the "narrow-input" class to the select element to reduce width */
 .form-container select.narrow-input {
     width: 51.5%; /* Adjust the width as needed */
@@ -152,11 +92,28 @@
     border-radius: 5px;
 }
   
-  .add-holiday-container {
-    display: inline-flex;
-    align-items: center;
+/* Style for file input */
+.file-input-container input {
+    display: none;
 }
-  
+
+/* Style the label/button for file input */
+.file-input-container label {
+    display: inline-block;
+    background-color: #0070C0;
+    color: #fff;
+    padding: 5px 10px; /* Adjust padding as needed */
+    border: 1px solid #0070C0;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 10px; /* Add margin to separate from other fields */
+}
+
+/* Hover effect for the label/button */
+.file-input-container label:hover {
+    background-color: #005A9C;
+}
+
     .menu-link1 {
     text-decoration: none;
     color: #333;
@@ -165,6 +122,11 @@
     background-color: #3498db;
     border-radius: 5px;
     transition: background-color 0.3s;
+}
+  
+  .add-holiday-container {
+    display: inline-flex;
+    align-items: center;
 }
   
   /* Apply the "narrow-input-button" class to the button element to reduce its width */
@@ -248,6 +210,33 @@
             border-radius: 5px;
             transition: background-color 0.3s;
         }
+  .pagination-container {
+    position: fixed; /* Fixed position to keep it at the bottom */
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: white; /* Set the background color as needed */
+    text-align: center;
+    padding: 10px;
+    border-top: 1px solid #ccc; /* Add a border if needed */
+  }
+  
+  .pagination {
+    display: inline-block;
+  }
+  
+  .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .active {
+    background-color: #007bff;
+    color: white;
+  }
+  
 
         .menu-link:hover {
             background-color: #2980b9;
@@ -517,7 +506,7 @@ tr:nth-child(even) {
             cursor: pointer;
             border: 1px solid #3498db;
             background-color: #f7f7f7;
-                       white-space: nowrap; /* Prevent line breaks */
+            white-space: nowrap; /* Prevent line breaks */
             
         }
 
@@ -601,19 +590,23 @@ tr:nth-child(even) {
         }
     </style>
 </head>
- <body onload="myDate()">
 <!-- <div class="header">
     <a th:href="@{/}">Home</a>
     <img src="admin.png" alt="admin" width="60" height="60" align="right">
     
 </div>
  -->
+ 
+
     <div class="container">
 <a th:href="@{/}">
     <img class="icon" th:src="@{/EasyConnect.jpg}" alt="Easy Connect">
 </a>
        
   
+
+
+       
         <ul class="menu">
 
             <li class="menu-item">
@@ -623,17 +616,20 @@ tr:nth-child(even) {
             
         </ul>
     </div>
-		<br />
-	
+    
+	<br />
+
+
+
  <div class="tabs">
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch} + '\''">Patch Catalog</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/create} + '\''">Create Patch</div>
-    <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/tag} + '\''">Tag Patch
         <span class="info-link">i</span>
     </div>
     
-   <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/untag} + '\''">UnTag Patch
+   <div class="tab tabLink menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/untag} + '\''">UnTag Patch
         <span class="info-link1">i</span>
     </div>
 
@@ -642,17 +638,23 @@ tr:nth-child(even) {
 </div>	
 
 
-<div id="RemovePatch" class="tabContent box" style="display: block;">
+<div id="UnTagPatch" class="tabContent box" style="display: block;">
     <div class="form-container">
-        <form action="#" th:action="@{/catelog-svc/patch/remove}" method="post">
+        <form action="#" th:action="@{/catelog-svc/patch/untag}" method="post" onload="myDate()" enctype="multipart/form-data">
+            <label for="id"><b>Emp Id(s)</b></label>
+            <input type="text" id="id" name="empIds" class="narrow-input" placeholder="Enter Emp ID(s), separated by commas or dash"><br>
             <label for="id"><b>Patch Id(s)</b></label>
             <input type="text" id="id" name="patchIds" class="narrow-input" placeholder="Enter Patch ID(s), separated by commas or dash"><br>
-            <!-- Use the name "slotIds" for the input field -->
+        <label for="complianceReport"><b>Compliance Report</b></label>
+            <input type="file" id="complianceReport" name="complianceReport" class="inputfile" />
 
             <br/>
+            <br/>
+            <br/>
 
-            <input type="submit" value="Delete Patch">
+            <input type="submit" value="UnTag Patch">
             <span th:text="${msg}" class="red"></span>
+
             <div id="helloid" class="loader"></div>
         </form>
     </div>

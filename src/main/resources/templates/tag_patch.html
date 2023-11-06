@@ -71,7 +71,77 @@
     <title>IT Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+
+.info-link {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0070C0; /* Change to your desired color */
+    margin-left: 5px; /* Adjust margin as needed */
+    cursor: pointer;
+    display: inline-flex; /* Use flexbox to center the icon and create a circle */
+    align-items: center; /* Vertically center the icon */
+    justify-content: center; /* Horizontally center the icon */
+    width: 12px; /* Set the circle's width */
+    height: 12px; /* Set the circle's height */
+    border: 2px solid #0070C0; /* Border to create the circle */
+    border-radius: 50%; /* Makes it a circle */
+}
+
+.info-link i {
+    color: #0070C0; /* Icon color */
+}
+
+.info-link:hover::after {
+    content: "Assign a patch or patches to an employee or multiple employees. You can tag (mark for Compliance completion) patches to employees using this option.";
+    display: block;
+    position: absolute;
+    background-color: #87CEFA; /* Light blue background color */
+    background-color: #ADD8E6; /* Bright light blue background color */
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px; /* Adjust margin as needed */
+    z-index: 1;
+    white-space: nowrap;
+    margin-left: 900px; /* Add margin to shift right */  
+    margin-top: 70px; /* Adjust margin for downward shift */      
     
+}
+
+
+.info-link1 {
+    font-size: 14px;
+    font-weight: bold;
+    color: #0070C0; /* Change to your desired color */
+    margin-left: 5px; /* Adjust margin as needed */
+    cursor: pointer;
+    display: inline-flex; /* Use flexbox to center the icon and create a circle */
+    align-items: center; /* Vertically center the icon */
+    justify-content: center; /* Horizontally center the icon */
+    width: 12px; /* Set the circle's width */
+    height: 12px; /* Set the circle's height */
+    border: 2px solid #0070C0; /* Border to create the circle */
+    border-radius: 50%; /* Makes it a circle */
+}
+
+.info-link1 i {
+    color: #0070C0; /* Icon color */
+}
+
+.info-link1:hover::after {
+    content: "Mark a patch or patches Compliant for an employee or multiple employees. You can untag(mark compliant) patches to employees using this option.";
+    display: block;
+    position: absolute;
+    background-color: #87CEFA; /* Light blue background color */
+    background-color: #ADD8E6; /* Bright light blue background color */
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 5px; /* Adjust margin as needed */
+    z-index: 1;
+    white-space: nowrap;
+    margin-left: 850px; /* Add margin to shift right */  
+    margin-top: 70px; /* Adjust margin for downward shift */       
+}
+   
  /* Apply the "narrow-input" class to the select element to reduce width */
 .form-container select.narrow-input {
     width: 51.5%; /* Adjust the width as needed */
@@ -587,12 +657,19 @@ tr:nth-child(even) {
     
 	<br />
 
-
  <div class="tabs">
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch} + '\''">Patch Catalog</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/create} + '\''">Create Patch</div>
     <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/remove} + '\''">Delete Patch</div>
-    <div class="tab tabLink  menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/tag} + '\''">Tag Patch</div>
+   <div class="tab tabLink  menu-link1" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/tag} + '\''">Tag Patch
+        <span class="info-link">i</span>
+    </div>
+    
+   <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/untag} + '\''">UnTag Patch
+        <span class="info-link1">i</span>
+    </div>
+
+    <div class="tab tabLink" th:onclick="'window.location.href = \'' + @{/catelog-svc/patch/softscan} + '\''">Softscan</div>
     
 </div>	
 

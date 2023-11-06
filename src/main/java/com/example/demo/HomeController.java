@@ -545,7 +545,7 @@ public class HomeController {
 		return new ResponseEntity(HttpStatus.OK);
 
 	}
-	@RequestMapping(value = "/catelog-svc/create-patch-request", method = RequestMethod.POST)
+	@RequestMapping(value = "/catelog-svc/create-automated-patching-request", method = RequestMethod.POST)
 	public ResponseEntity bookPatchingRequest(
 	        @RequestParam String patchName,
 	        @RequestParam String hostName,
@@ -615,10 +615,23 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/catelog-svc/patch/create", method = RequestMethod.GET)
-	public String createPatch() {
+	public String createPatch(ModelMap model) {
+		List<Patch> listOfAllPatches = patchManagementService.findUnPaginatedCatelog();
+		model.addAttribute("listOfAllPatches", listOfAllPatches);
+
+		
 		return "create_patch.html";
 	}
 
+	@RequestMapping(value = "/catelog-svc/patch/softscan", method = RequestMethod.GET)
+	public String softscan(ModelMap model) {
+		//List<Patch> listOfAllPatches = patchManagementService.findUnPaginatedCatelog();
+		//model.addAttribute("listOfAllPatches", listOfAllPatches);
+
+		
+		return "softscan.html";
+	}
+	
 	@RequestMapping(value = "/catelog-svc/patch/create", method = RequestMethod.POST)
 	public String createPatch(@ModelAttribute Patch patchModel, ModelMap model)
 			throws ParseException, IOException, GeneralSecurityException {
@@ -659,6 +672,51 @@ public class HomeController {
 		return "tag_patch.html";
 	}
 
+	@RequestMapping(value = "/catelog-svc/patch/untag", method = RequestMethod.POST)
+	public String untagPatch(@RequestParam("patchIds") String patchIds, @RequestParam("empIds") String empIds, Model model)
+			throws ParseException, IOException, GeneralSecurityException {
+		// System.err.println(BASE_PATH_CLOUD);
+		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
+		msg = "";
+		
+		List<String> patchIdsList = new ArrayList<>();
+		if (StringUtils.contains(patchIds, "-")) {
+			patchIdsList = extractedIds(patchIds);
+
+		} else {
+
+			patchIdsList = Arrays.asList(patchIds.split("\\s*,\\s*"));
+		}
+		
+		List<String> empIdsList = new ArrayList<>();
+		if (StringUtils.contains(empIds, "-")) {
+			empIdsList = extractedIds(empIds);
+
+		} else {
+
+			empIdsList = Arrays.asList(empIds.split("\\s*,\\s*"));
+		}
+		
+		
+		TagRequest tagPatchObj = new TagRequest(patchIdsList, empIdsList);
+		
+		msg = patchManagementService.untagPatchsToEmps(tagPatchObj);
+
+		model.addAttribute("msg", msg);
+		
+		return "untag_patch.html";
+
+	}
+
+	@RequestMapping(value = "/catelog-svc/patch/untag", method = RequestMethod.GET)
+	public String untagPatch(ModelMap model) {
+		// model.addAttribute("regions", getAllRegions());
+
+		// model.addAttribute("org_roles", getAllOrgRoles());
+
+		return "untag_patch.html";
+	}
+
 	@RequestMapping(value = "/catelog-svc/patch/tag", method = RequestMethod.POST)
 	public String tagPatch(@RequestParam("patchIds") String patchIds, @RequestParam("empIds") String empIds, Model model)
 			throws ParseException, IOException, GeneralSecurityException {
@@ -694,6 +752,8 @@ public class HomeController {
 		return "tag_patch.html";
 
 	}
+
+	
 	
 	@GetMapping({ "/user-svc/emp" })
 	public String listEmp(Model model, @RequestParam("page") Optional<Integer> page,

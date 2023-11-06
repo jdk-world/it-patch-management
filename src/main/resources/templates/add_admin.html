@@ -608,23 +608,24 @@ tr:nth-child(even) {
             <label for="emp_name"><b>Name</b></label>
             <input type="text" id="emp_name" name="emp_name" value="" class="narrow-input"><br>
 
-            
-            <label for="emp_region"><b>Region</b></label>
+<label for="emp_region"><b>Region</b></label>
 <select class="narrow-input" id="emp_region" name="emp_region">
-    <option value="N/A"></option> <!-- Default value -->
+    <option value="" disabled selected>Select a Region</option>
     <th:block th:each="emp_region : ${regions}">
-        <option th:value="${emp_region.name}" th:text="${emp_region.name}"></option>
+        <option th:unless="${emp_region.name == 'ALL'}" th:value="${emp_region.name}" th:text="${emp_region.name}"></option>
     </th:block>
 </select>
 
+
 			        
-            <label for="org_role"><b>Role</b></label>
+<label for="org_role"><b>Role</b></label>
 <select class="narrow-input" id="org_role" name="org_role">
-    <option value="N/A"></option> <!-- Default value -->
+    <option value="" disabled selected>Select a Role</option>
     <th:block th:each="org_role : ${org_roles}">
         <option th:value="${org_role}" th:text="${org_role}"></option>
     </th:block>
 </select>
+
 
 
 
