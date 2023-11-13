@@ -37,6 +37,45 @@ graph TB;
     Employee -->|search slots with filters| SS
 ```
 
+
+
+
+graph TD;
+  subgraph it_patch_management[IT Patch Management System]
+    it_patch_management(Gateway)
+    compliance_reporting(Compliance Reporting Service)
+    patch_management(Patch Management Services)
+    user_management(User Management Service)
+    slot_management(Slot Management Service)
+  end
+
+  it_patch_management -->|Gateway| compliance_reporting
+  it_patch_management -->|Gateway| patch_management
+  it_patch_management -->|Gateway| user_management
+  it_patch_management -->|Gateway| slot_management
+
+  subgraph features
+    add_slot(Add Slot)
+    add_slots(Add Slots)
+    delete_slot(Delete Slot)
+    delete_slots(Delete Slots)
+    slot_book_ui(Slot Book UI)
+    filter_service(Filter Service)
+  end
+
+  add_slot -->|slot_management| slot_management
+  add_slots -->|slot_management| slot_management
+  delete_slot -->|slot_management| slot_management
+  delete_slots -->|slot_management| slot_management
+  slot_book_ui -->|slot_management| slot_management
+  filter_service -->|slot_management| slot_management
+  slot_management -->|slot_management| slot_management_service
+  compliance_reporting -->|compliance_reporting| compliance_reporting_service
+  patch_management -->|patch_management| patch_management_services
+  user_management -->|user_management| user_management_service
+
+
+
 ## Microservices -    
  -  [it-patch-management](https://github.com/jdk-world/it-patch-management)    
  -  [compliance-reporting-service](https://github.com/jdk-world/compliance-reporting-service)       
