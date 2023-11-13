@@ -39,95 +39,66 @@ graph TB;
 
 
 
-```mermaid
-graph TD;
-  subgraph it_patch_management[IT Patch Management System]
-    gateway(Gateway)
-    slot_management(Slot Management Service)
-    patch_management(Patch Management Service)
-    user_management(User Management Service)
-    compliance_reporting(Compliance Reporting Service)
-    common_services(Common Services)
-  end
+@startuml
+!define RECTANGLE class
 
-  gateway -->|Gateway| slot_management
-  gateway -->|Gateway| patch_management
-  gateway -->|Gateway| user_management
-  gateway -->|Gateway| compliance_reporting
-  gateway -->|Gateway| common_services
+RECTANGLE it_patch_management {
+  Gateway
+  UI
+}
 
-  subgraph slot_management_service[Slot Management Service]
-    add_slot(Add Slot)
-    add_slots(Add Slots)
-    delete_slot(Delete Slot)
-    delete_slots(Delete Slots)
-    slot_book_ui(Slot Book UI)
-    filter_service(Filter Service)
-  end
+RECTANGLE slot_management_service {
+  AddSlot
+  AddSlots
+  DeleteSlot
+  DeleteSlots
+  SlotBookUI
+  FilterService
+}
 
-  slot_management -->|Slot Management| add_slot
-  slot_management -->|Slot Management| add_slots
-  slot_management -->|Slot Management| delete_slot
-  slot_management -->|Slot Management| delete_slots
-  slot_management -->|Slot Management| slot_book_ui
-  slot_management -->|Slot Management| filter_service
+RECTANGLE patch_management_services {
+  PatchCatalog
+  CreatePatch
+  DeletePatch
+  TagPatch
+  UnTagPatch
+  SoftScan
+}
 
-  subgraph patch_management_service[Patch Management Service]
-    patch_catalog(Patch Catalog)
-    create_patch(Create Patch)
-    delete_patch(Delete Patch)
-    tag_patch(Tag Patch)
-    untag_patch(Un-Tag Patch)
-    soft_scan(SoftScan)
-  end
+RECTANGLE user_management_service {
+  EmployeeListing
+  AddEmployee
+  RemoveEmployee
+  AdminListing
+  AddAdmin
+  RemoveAdmin
+  AddRegion
+  AddRole
+  RoleListing
+  RegionListing
+}
 
-  patch_management -->|Patch Management| patch_catalog
-  patch_management -->|Patch Management| create_patch
-  patch_management -->|Patch Management| delete_patch
-  patch_management -->|Patch Management| tag_patch
-  patch_management -->|Patch Management| untag_patch
-  patch_management -->|Patch Management| soft_scan
+RECTANGLE compliance_reporting_service {
+  ComplianceReportListing
+  Dashboards
+}
 
-  subgraph user_management_service[User Management Service]
-    employee_listing(Employee Listing)
-    add_employee(Add Employee)
-    remove_employee(Remove Employee/Employees)
-    admin_listing(Admin Listing)
-    add_admin(Add Admin)
-    remove_admin(Remove Admin/ Admins)
-    add_region(Add Region)
-    add_role(Add Role)
-    role_listing(Role Listing)
-    region_listing(Region Listing)
-  end
+RECTANGLE common_services {
+  NotificationEventCalendarService
+  DatabaseTabs
+  Filter
+  Pagination
+  Search
+  Sorting
+}
 
-  user_management -->|User Management| employee_listing
-  user_management -->|User Management| add_employee
-  user_management -->|User Management| remove_employee
-  user_management -->|User Management| admin_listing
-  user_management -->|User Management| add_admin
-  user_management -->|User Management| remove_admin
-  user_management -->|User Management| add_region
-  user_management -->|User Management| add_role
-  user_management -->|User Management| role_listing
-  user_management -->|User Management| region_listing
+it_patch_management --> slot_management_service
+it_patch_management --> patch_management_services
+it_patch_management --> user_management_service
+it_patch_management --> compliance_reporting_service
+it_patch_management --> common_services
 
-  subgraph compliance_reporting_service[Compliance Reporting Service]
-    compliance_report_listing(Compliance Report Listing)
-    dashboards(Dashboards)
-  end
-
-  compliance_reporting -->|Compliance Reporting| compliance_report_listing
-  compliance_reporting -->|Compliance Reporting| dashboards
-
-  common_services -->|Common Services| notification_event_calendar(Notification, Event, Calendar Service)
-  common_services -->|Common Services| database_tabs(Database Tabs)
-  common_services -->|Common Services| filter(Filter)
-  common_services -->|Common Services| pagination
-  common_services -->|Common Services| search_sorting(Search, Sorting)
-
-
-```
+@enduml
 
 
 
