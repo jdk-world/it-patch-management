@@ -39,6 +39,7 @@ graph TB;
 
 
 
+```mermaid
 
 graph TD;
   subgraph it_patch_management[IT Patch Management System]
@@ -73,6 +74,7 @@ graph TD;
   compliance_reporting -->|compliance_reporting| compliance_reporting_service
   patch_management -->|patch_management| patch_management_services
   user_management -->|user_management| user_management_service
+```
 
 
 
