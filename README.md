@@ -40,20 +40,19 @@ graph TB;
 
 
 ```mermaid
-
 graph TD;
   subgraph it_patch_management[IT Patch Management System]
-    it_patch_management(Gateway)
+    gateway(Gateway)
     compliance_reporting(Compliance Reporting Service)
     patch_management(Patch Management Services)
     user_management(User Management Service)
     slot_management(Slot Management Service)
   end
 
-  it_patch_management -->|Gateway| compliance_reporting
-  it_patch_management -->|Gateway| patch_management
-  it_patch_management -->|Gateway| user_management
-  it_patch_management -->|Gateway| slot_management
+  gateway -->|Gateway| compliance_reporting
+  gateway -->|Gateway| patch_management
+  gateway -->|Gateway| user_management
+  gateway -->|Gateway| slot_management
 
   subgraph features
     add_slot(Add Slot)
@@ -74,6 +73,7 @@ graph TD;
   compliance_reporting -->|compliance_reporting| compliance_reporting_service
   patch_management -->|patch_management| patch_management_services
   user_management -->|user_management| user_management_service
+
 ```
 
 
