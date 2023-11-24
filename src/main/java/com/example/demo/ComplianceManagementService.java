@@ -63,7 +63,7 @@ public class ComplianceManagementService {
 			// "/create-patch", request, String.class);
 			response = restTemplate.postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/filter", request, String.class);
 
-			System.err.println("hello");
+			System.err.println("Making Call to ->" + COMPLIANCE_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.postForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/filter", request, List.class);
 
 		} catch (Exception e) {
@@ -105,7 +105,7 @@ public class ComplianceManagementService {
 		try {
 
 			response = restTemplate.getForEntity(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/dashboard", String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to ->" + COMPLIANCE_MGMT_SERVICE_BASE_URL);
 			List<Employee> books = restTemplate.getForObject(COMPLIANCE_MGMT_SERVICE_BASE_URL + "/dashboard",
 					List.class);
 

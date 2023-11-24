@@ -55,7 +55,7 @@ public class UserManagementService {
 
 			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/emp",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to -> "+USER_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/emp", List.class);
 
 		} catch (Exception e) {
@@ -92,7 +92,7 @@ public class UserManagementService {
 
 			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/admin",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to -> "+USER_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/admin", List.class);
 
 		} catch (Exception e) {
@@ -256,7 +256,7 @@ public class UserManagementService {
 
 			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/region",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to -> "+USER_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/region", List.class);
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -292,7 +292,7 @@ public class UserManagementService {
 
 			ResponseEntity<String> response = restTemplate.getForEntity(USER_MGMT_SERVICE_BASE_URL + "/role",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to -> "+USER_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(USER_MGMT_SERVICE_BASE_URL + "/role", List.class);
 		} catch (Exception e) {
 			// TODO: handle exception

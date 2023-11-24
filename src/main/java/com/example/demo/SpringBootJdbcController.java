@@ -1,12 +1,20 @@
 package com.example.demo;
 
+import biweekly.component.VEvent;
+import biweekly.property.ICalProperty;
+import biweekly.property.Image;
+import biweekly.property.TextProperty;
+
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import biweekly.property.Summary;
 import biweekly.property.Location;
+import biweekly.property.Organizer;
 import biweekly.property.Description;
+import biweekly.property.ICalProperty;
 import biweekly.property.DateStart;
+import biweekly.property.Classification;
 import biweekly.property.DateEnd;
 
 import java.io.File;
@@ -548,30 +556,33 @@ public class SpringBootJdbcController {
 	}
 
 	private void sendEmailWithEventDetails(String[] emailArr, Event event)
-			throws IOException, GeneralSecurityException {
-		Gmail gmailService = getGmailService(); // Implement this method to obtain Gmail API service
+	        throws IOException, GeneralSecurityException {
+	    Gmail gmailService = getGmailService(); // Implement this method to obtain Gmail API service
 
 	    // Compose the email to send to event attendees
 	    String emailMessage = "<html><body>";
 	    emailMessage += "<h2>You are invited to the event</h2>";
+	    emailMessage += "<p><b>Organizer:</b> " + "SKG" + "</p>";
 	    emailMessage += "<p><b>Summary:</b> " + event.getSummary() + "</p>";
 	    emailMessage += "<p><b>Location:</b> " + event.getLocation() + "</p>";
 	    emailMessage += "<p><b>Description:</b> " + event.getDescription() + "</p>";
 	    emailMessage += "<p><b>Start Time:</b> " + formatDate(event.getStart().getDateTime()) + "</p>";
 	    emailMessage += "<p><b>End Time:</b> " + formatDate(event.getEnd().getDateTime()) + "</p>";
 	    emailMessage += "<p>See the attached calendar event for more details.</p>";
+	    emailMessage += "<p><b>Google Meet details:</b>" + event.getHangoutLink() + "</p>";
+
 	    emailMessage += "</body></html>";
 
-	    MimeMessage emailMimeMessage = createMimeMessage(senderEmail, emailArr, emailSubject, emailMessage);
+	    MimeMessage emailMimeMessage = createMimeMessage(senderEmail, emailArr, event.getSummary(), emailMessage);
 
 	    // Attach the calendar event
 	    byte[] icsFile = generateCalendarEventFile(event);
 	    try {
-			emailMimeMessage = attachCalendarEvent(emailMimeMessage, icsFile);
-		} catch (MessagingException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	        // emailMimeMessage.setContent(emailMessage, "text/html");
+	        emailMimeMessage = attachCalendarEvent(emailMimeMessage, icsFile);
+	    } catch (MessagingException e1) {
+	        e1.printStackTrace();
+	    }
 
 	    // Send the email
 	    try {
@@ -599,6 +610,33 @@ public class SpringBootJdbcController {
      vEvent.setDateStart(new DateStart(startDate));
      vEvent.setDateEnd(new DateEnd(endDate));
 
+     com.google.api.services.calendar.model.Event.Organizer organizer = event.getOrganizer();
+     if (organizer != null) {
+         String organizerEmail = organizer.getEmail();
+         vEvent.setOrganizer(organizerEmail);
+     } else {
+         // Handle the case where the organizer is not available
+     }
+     
+     vEvent.setSummary(event.getSummary() + " Slot");
+
+     vEvent.addImage(new Image("image/jpg","EasyConnect.jpg"));
+
+     vEvent.setClassification(Classification.PUBLIC);
+     vEvent.setDescription("Hello");
+
+     
+
+  // Add HTML link and Hangout link as custom properties
+     String htmlLink = event.getHtmlLink();
+     String hangoutLink = event.getHangoutLink();
+
+     // Set location if available
+     if (event.getLocation() != null) {
+    	    String locationWithBoldText = "<b>Location:</b> <a href=\"" + event.getHangoutLink() + "\" style=\"text-decoration: none; color: #007bff;\">Google Meet Link</a>";
+    	    vEvent.setLocation("<b>"+event.getHangoutLink()+"</b>");
+    }
+ 	
      // Add the event to an iCalendar
 
         ical.addEvent(vEvent);
@@ -613,6 +651,7 @@ public class SpringBootJdbcController {
 
         return icsBytes;
     }
+	
 	
 	// Helper method to format DateTime to a readable format
 	private String formatDate(DateTime dateTime) {

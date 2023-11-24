@@ -63,7 +63,7 @@ public class PatchManagementService {
 
 			HttpEntity<String> response = restTemplate.getForEntity(PATCH_MGMT_SERVICE_BASE_URL + "/catelog",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to ->" + PATCH_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(PATCH_MGMT_SERVICE_BASE_URL + "/catelog", List.class);
 
 		} catch (Exception e) {
@@ -110,7 +110,7 @@ public class PatchManagementService {
 
 			HttpEntity<String> response = restTemplate.getForEntity(PATCH_MGMT_SERVICE_BASE_URL + "/catelog",
 					String.class);
-			System.err.println("hello");
+			System.err.println("Making Call to -> "+PATCH_MGMT_SERVICE_BASE_URL);
 			books = restTemplate.getForObject(PATCH_MGMT_SERVICE_BASE_URL + "/catelog", List.class);
 
 		} catch (Exception e) {

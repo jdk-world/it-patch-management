@@ -24,61 +24,121 @@
 <script>
 var selectedPatchName = "";
 
-function openPopup() {
-	var popupOverlay = document.getElementById("popup-overlay");
-	var popupOverlay = document.getElementById("popup-overlay");
-	var automatedButton = document.getElementById("automated-button");
-	var selectedPatchName = automatedButton.getAttribute("data-patch-name");
+function openPopup(bookId) {
 	
-	document.getElementById("patch-name").textContent = selectedPatchName;
+	var button = document.getElementById('automated-button-' + bookId);
+    var patchInfo = button.getAttribute('data-patch-info-automated-' + bookId);
+    // Split the values using the separator '|'
+    var values = patchInfo.split('|');
+    // Extract individual values
+    var patchName = values[0];
+    var description = values[1];
+    var version = values[2];
+    var releaseDate = values[3];
+	var popupOverlay = document.getElementById("popup-overlay-automated");
+
+	document.getElementById("patch-name-automated").textContent = patchName;
+	document.getElementById("patch-description-automated").textContent = description;
+	document.getElementById("patch-version-automated").textContent = version;
+	document.getElementById("patch-releaseDate-automated").textContent = releaseDate;
+	popupOverlay.className = ""; 
+	document.getElementById("popup-overlay-automated").classList.add("box");
+}
+
+
+function openPopupSelf(bookId) {
+	
+	var button = document.getElementById('self-button-' + bookId);
+    var patchInfo = button.getAttribute('data-patch-info-self-' + bookId);
+    // Split the values using the separator '|'
+    var values = patchInfo.split('|');
+    // Extract individual values
+    var patchName = values[0];
+    var description = values[1];
+    var version = values[2];
+    var releaseDate = values[3];
+	var popupOverlay = document.getElementById("popup-overlay-self");
+
+	document.getElementById("patch-name-self").textContent = patchName;
+	document.getElementById("patch-description-self").textContent = description;
+	document.getElementById("patch-version-self").textContent = version;
+	document.getElementById("patch-releaseDate-self").textContent = releaseDate;
+
+
 	
 	popupOverlay.className = ""; 
-		document.getElementById("popup-overlay").classList.add("box");
+	document.getElementById("popup-overlay-self").classList.add("box");
 }
+
 
 function closePopup() {
-	document.getElementById("popup-overlay").classList.add("hidden");
+	document.getElementById("popup-overlay-automated").classList.add("hidden");
+	document.getElementById("popup-overlay-self").classList.add("hidden");
+
 }
 
-function submitPatchRequest() {
-	var popupOverlay = document.getElementById("popup-overlay");
-	var popupOverlay = document.getElementById("popup-overlay");
-	var automatedButton = document.getElementById("automated-button");
-	var selectedPatchName = automatedButton.getAttribute("data-patch-name");
-   // var hostName = "${empAssets['1']}"; // Use this value in other places as well
+function submitPatchRequest(bookId) {
+	
+	var button = document.getElementById('automated-button-submit-' + bookId);
+    var patchInfo = button.getAttribute('data-patch-info-automated-submit-' + bookId);
+    //alert(patchInfo);
+    // Split the values using the separator '|'
+    var values = patchInfo.split('|');
+    // Extract individual values
+    var patchName = values[0];
+    var description = values[1];
+    var version = values[2];
+    var releaseDate = values[3];
+	
+    var bookAttrId = "data-patch-name-" + bookId;
+    var automatedButtonAttrId = "automated-button-" + bookId;
+    var popupOverlay = document.getElementById("popup-overlay");
+    var automatedButton = document.getElementById(automatedButtonAttrId);
+    var selectedPatchName = automatedButton.getAttribute(bookAttrId);
     var hostName = "LP TEST"; // Use this value in other places as well
     var link = 'create-automated-patching-request';
-
     var preferredTime = document.getElementById("preferred-time").value;
-
     
-    var data = "patchName=" + selectedPatchName+ "&hostName=" +hostName+ "&empId=1" + "&preferredTime=" + preferredTime;
-	//alert('data'+data);
+    // Show processing icon
+    showProcessingIcon();
 
-    // Get the selected time from the input
+    var data = "patchName=" + patchName + "&hostName=" + hostName + "&empId=1" + "&preferredTime=" + preferredTime;
 
+    if (data != null) {
+        $.ajax({
+            type: "post",
+            url: link,
+            cache: false,
+            data: data,
+            success: function (response) {
+                // Hide processing icon
+                hideProcessingIcon();
 
-if (data != null) {
+                document.getElementById("msg").innerHTML = "Automated Patch request created Successfully for <b>" + patchName + "</b> for the requested time!";
+                document.getElementById("msg").style.color = "red";
+            },
+            error: function () {
+                // Hide processing icon
+                hideProcessingIcon();
 
-    $.ajax({
-     type: "post",
-     url: link,
-     cache: false,    
-	 data : data,
-     success: function(response){
-    	 document.getElementById("msg").innerHTML = "Automated Patch request created Successfully for <b>" + selectedPatchName + "</b> for the requested time!";
- 	    //document.getElementById("result").className  = ""; 
- 	    document.getElementById("msg").style.color = "red";
- 	   // document.getElementById(id).disabled = "true";
-
-     },
-     error: function(){      
-      alert('Error while request..');
-     }
-    });
-
-   // madeAjaxCall3();
+                alert('Error while request..');
+            }
+        });
+    }
 }
+
+function showProcessingIcon() {
+    // Show your processing icon here
+    // For example, you can add a spinning icon or a loading message
+    // You may need to adjust this based on how your processing icon is implemented
+    // For simplicity, I'm adding a text message
+    document.getElementById("processing-icon").innerHTML = "Processing..."; 
+}
+
+function hideProcessingIcon() {
+    // Hide your processing icon here
+    // Remove or hide the spinning icon or loading message
+    document.getElementById("processing-icon").innerHTML = ""; 
 }
 
 
@@ -646,45 +706,106 @@ function filterForm() {
             <td th:text="${book.application}">-</td>
            <!--  <td th:text="${book.applicabilityStatus}">-</td>  -->
 <td>
-    <button th:id="${book.id}" th:if="${book.applicabilityStatus == 'self'}" onclick="window.location.href='/'" style="background-color: #B0E57C; color: #FFF; min-width: 95px; border: none;">Self</button>
 
-<button th:attr="data-patch-name=${book.name}" th:onclick="openPopup()" th:if="${book.applicabilityStatus == 'automated'}" id="automated-button" style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">Automated</button>
+<button th:attr="'data-patch-info-self-' + ${book.id}=${book.name} + '|' + ${book.description} + '|' + ${book.version} + '|' + ${book.releaseDate}" 
+        th:onclick="'openPopupSelf(\'' + ${book.id} + '\')'" 
+        th:if="${book.applicabilityStatus == 'self'}" 
+        th:id="'self-button-' + ${book.id}" 
+        style="background-color: #B0E57C; color: #FFF; min-width: 95px; border: none;">
+    Self
+</button>
 
+<button th:attr="'data-patch-info-automated-' + ${book.id}=${book.name} + '|' + ${book.description} + '|' + ${book.version} + '|' + ${book.releaseDate}" 
+        th:onclick="'openPopup(\'' + ${book.id} + '\')'" 
+        th:if="${book.applicabilityStatus == 'automated'}" 
+        th:id="'automated-button-' + ${book.id}" 
+        style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">
+    Automated
+</button>
+
+<!-- <button th:attr="'data-patch-name-' + ${book.id}=${book.name}" th:onclick="'openPopup(\'' + ${book.id} + '\')'" th:if="${book.applicabilityStatus == 'automated'}" th:id="'automated-button-' + ${book.id}" style="background-color: #33FF57; color: #FFF; max-width: 95px; border: none;">Automated</button>
+ -->
     <button th:if="${book.applicabilityStatus == 'bookslot'}" th:onclick="'window.location.href = \'' + @{/user} + '\''">Book Slot</button>
 </td>
 
             
             <!-- <td th:text="${book.compatibility}">-</td> -->
             <!-- <td th:text="${book.isActive}">-</td>-->
+
+<div id="popup-overlay-automated" class="box hidden">
+    <h2>Automated Patch Installation</h2>
+    <p>Please select your preferred time for automated patch installation:</p>
+    <input type="datetime-local" id="preferred-time" required>
+    <p><b>Estimated time required:</b> 30 minutes</p>
+    <p th:if="${empAssets != null and empAssets['1'] != null}">
+        <b>Hostname:</b> <span id="hostname" th:text="${empAssets['1']}">User-PC</span>) 
+    </p>
+    <p><b>Patch Name:</b> <span id="patch-name-automated">Example Patch</span></p>
+    <p><b>Description:</b> <span id="patch-description-automated">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget justo ut justo fermentum sodales.</span></p>
+    <p><b>Version:</b> <span id="patch-version-automated">1.0.0</span></p>
+    <p><b>Release Date:</b> <span id="patch-releaseDate-automated">2023-12-01</span></p>
+ 
+        <span th:id="'msg'"></span>
+    
+ <div class="center-box">
+        <div class="button-container">
+			<button th:id="'automated-button-submit-' + ${book.id}"
+				th:attr="'data-patch-info-automated-submit-' + ${book.id}=${book.name} + '|' + ${book.description} + '|' + ${book.version} + '|' + ${book.releaseDate}"
+				th:onclick="'submitPatchRequest(\'' + ${book.id} + '\')'"
+				class="button-form">Submit Request</button>
+
+			<div id="processing-icon"></div>
+           
+             <span style="margin: 0 10px;"></span> <!-- Add spacing between buttons -->
+            <button th:onclick="closePopup()" class="button-form">Close</button>
+        </div>
+    </div>
+    
+    
+</div>            
+
+<div id="popup-overlay-self" class="box hidden">
+    <h2>Self Patch Installation</h2>
+    <p>Follow the step-by-step instructions below to seamlessly install the latest patch on your machine:</p>
+    
+    <!-- Check if empAssets is not null and contains the required data -->
+    <p th:if="${empAssets != null and empAssets['1'] != null}">
+        <b>Hostname:</b> <span id="hostname" th:text="${empAssets['1']}">User-PC</span>
+    </p>
+    
+    <!-- Display dynamic patch information -->
+    <p><b>Patch Name:</b> <span id="patch-name-self">Example Patch</span></p>
+    <p><b>Description:</b> <span id="patch-description-self">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget justo ut justo fermentum sodales.</span></p>
+    <p><b>Version:</b> <span id="patch-version-self">1.0.0</span></p>
+    <p><b>Release Date:</b> <span id="patch-releaseDate-self">2023-12-01</span></p>
+    
+    <!-- Include helpful links for users -->
+    <div class="helpful-links">
+        <p>Before you begin, ensure you have reviewed the <a href="#user-manual-link">User Manual</a> for detailed instructions.</p>
+        <p>If you encounter any issues, visit our <a href="#support-page-link">Support Page</a> for assistance.</p>
+    </div>
+
+    <div class="center-box">
+        <div class="button-container">
+            <!-- Adjust onclick function based on your requirements -->
+            <button th:onclick="startSelfInstallation()" class="button-form">Start Installation</button>
             
+            <!-- Add spacing between buttons -->
+            <span style="margin: 0 10px;"></span> 
+            <button th:onclick="closePopup()" class="button-form">Close</button>
+        </div>
+    </div>
+</div>
+
+
+
 			
 			</tr>
 		</tbody>
 	</table>
 	
 	
-<div id="popup-overlay" class="box hidden">
-    <h2>Automated Patch Installation</h2>
-    <p>Please select your preferred time for automated patch installation:</p>
-    <input type="datetime-local" id="preferred-time" required>
-    <p>Estimated time required: 30 minutes</p>
-    <p th:if="${empAssets != null and empAssets['1'] != null}">
-        Your machine (Hostname: <span id="hostname" th:text="${empAssets['1']}">User-PC</span>) will be used for the automated patch installation.
-    </p>
-    <p>Patch Name: <span id="patch-name">Example Patch</span></p>
-    
-        <span th:id="'msg'"></span>
-    
- <div class="center-box">
-        <div class="button-container">
-            <button th:onclick="submitPatchRequest()" class="button-form">Submit Request</button>
-            <span style="margin: 0 10px;"></span> <!-- Add spacing between buttons -->
-            <button th:onclick="closePopup()" class="button-form">Close</button>
-        </div>
-    </div>
-    
-    
-</div>
+
 
 	
 <script type="text/javascript">
