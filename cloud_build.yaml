@@ -14,7 +14,7 @@ steps:
     - run
     - --filename=deployment.yaml
     - --image=gcr.io/dulcet-listener-317509/it-patch-management:latest
-    - --location=us-central1-c
-    - --cluster=cluster-1
+    - --location=us-central1
+    - --cluster=autopilot-cluster-2
 options:
   logging: CLOUD_LOGGING_ONLY
