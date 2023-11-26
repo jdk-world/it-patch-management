@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: it-patch-management-ver1
-        image: docker.io/saurabh2204/it-patch-management:latest
+        image: gcr.io/saurabh2204/it-patch-management:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8899
