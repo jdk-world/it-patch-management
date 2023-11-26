@@ -45,5 +45,7 @@ graph TB;
  -  [user-management-service](https://github.com/jdk-world/user-management-service)   
  -  [slot-management-service](https://github.com/jdk-world/slot-management-service)    
 
+## Policy Library -   
+[gitops-policy-repo](https://github.com/jdk-world/gitops-policy-repo)
 
 
