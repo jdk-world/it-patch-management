@@ -4,16 +4,16 @@ steps:
     entrypoint: 'mvn'
     args: ['clean', 'install', '-DskipTests']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/saurabh2204/it-patch-management:latest', '.']
+    args: ['build', '-t', 'gcr.io/it-patch-management:latest', '.']
   # push container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/saurabh2204/it-patch-management:latest']
+    args: ['push', 'gcr.io/it-patch-management:latest']
   # Deploy on GKE
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
     - run
     - --filename=deployment.yaml
-    - --image=gcr.io/saurabh2204/it-patch-management:latest
+    - --image=gcr.io/it-patch-management:latest
     - --location=us-central1-c
     - --cluster=cluster-1
 options:
