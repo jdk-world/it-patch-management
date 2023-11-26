@@ -23,11 +23,6 @@ apiVersion: apps/v1
 
 kind: Deployment
 
-metadata:
-  name: it-patch-management-deployment-v1
-  labels:
-    app: it-patch-management-dep-label
-
 spec:
   replicas: 1
   selector: 
