@@ -688,13 +688,13 @@ tr:nth-child(even) {
     <div class="form-container">
         <form action="#" th:action="@{/catelog-svc/patch/create}" method="post" onload="myDate()">
             <label for="name"><b>Name</b></label>
-            <input type="text" id="name" name="name" value="" class="narrow-input"><br>
+            <input type="text" id="name" name="name" value="" class="narrow-input" placeholder="Enter Patch Name"><br>
 
             <label for="description"><b>Description</b></label>
-            <input type="text" id="description" name="description" value="" class="narrow-input"><br>
+            <input type="text" id="description" name="description" value="" class="narrow-input" placeholder="Enter Patch Description"><br>
 
             <label for="version"><b>Version</b></label>
-            <input type="text" id="version" name="version" value="" class="narrow-input"><br>
+            <input type="text" id="version" name="version" value="" class="narrow-input" placeholder="Enter Patch Version"><br>
 
             <label for="releaseDate"><b>Release Date & Time</b></label>
             <input type="datetime-local" id="releaseDate" name="releaseDate" value="" class="narrow-input"><br>

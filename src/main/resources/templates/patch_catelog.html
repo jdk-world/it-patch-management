@@ -23,9 +23,11 @@
 
 <script>
 var selectedPatchName = "";
+var bookIdGlobal = "";
+
 
 function openPopup(bookId) {
-	
+	bookIdGlobal = bookId;
 	var button = document.getElementById('automated-button-' + bookId);
     var patchInfo = button.getAttribute('data-patch-info-automated-' + bookId);
     // Split the values using the separator '|'
@@ -78,10 +80,12 @@ function closePopup() {
 }
 
 function submitPatchRequest(bookId) {
-	
+	bookId = bookIdGlobal;
 	var button = document.getElementById('automated-button-submit-' + bookId);
     var patchInfo = button.getAttribute('data-patch-info-automated-submit-' + bookId);
-    //alert(patchInfo);
+    alert(bookId);
+
+    alert(patchInfo);
     // Split the values using the separator '|'
     var values = patchInfo.split('|');
     // Extract individual values
@@ -90,6 +94,10 @@ function submitPatchRequest(bookId) {
     var version = values[2];
     var releaseDate = values[3];
 	
+   // alert(patchName);
+   // alert(description);
+   // alert(version);
+
     var bookAttrId = "data-patch-name-" + bookId;
     var automatedButtonAttrId = "automated-button-" + bookId;
     var popupOverlay = document.getElementById("popup-overlay");
@@ -788,7 +796,7 @@ function filterForm() {
     <div class="center-box">
         <div class="button-container">
             <!-- Adjust onclick function based on your requirements -->
-            <button th:onclick="startSelfInstallation()" class="button-form">Start Installation</button>
+            <button th:onclick="closePopup()" class="button-form">Start Installation</button>
             
             <!-- Add spacing between buttons -->
             <span style="margin: 0 10px;"></span> 

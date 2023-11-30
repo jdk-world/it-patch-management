@@ -929,8 +929,20 @@ public class HomeController {
 		// utilService.setBASE_PATH_CLOUD(BASE_PATH_CLOUD);
 		msg = "";
 		getAllRegions();
-			msg = slotManagementService.insertslot(slotModel);
-
+		msg = slotManagementService.insertslot(slotModel);
+		int requestId = Integer.parseInt(StringUtils.substringAfterLast(msg, "-"));
+/**
+ * 	public ResponseEntity bookSlotAndCreateEvent(@RequestParam String startDateTime, @RequestParam String endDateTime,
+			@RequestParam String emailId, @RequestParam int requestId, @RequestParam String timeZone,
+			@RequestParam String is_booked) throws IOException, GeneralSecurityException, MessagingException {
+ */
+		if(slotModel.isIs_booked())
+			try {
+				bookSlotAndCreateEvent(slotModel.getSlot_start()+":00.0", slotModel.getSlot_end()+":00.0", slotModel.getAttendee_email_list(), requestId, slotModel.getTime_zone(), "true");
+			} catch (Exception e) {
+				e.printStackTrace();
+			} 
+		
 		model.addAttribute("msg", msg);
 
 		return "add_slot.html";

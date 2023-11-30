@@ -6,6 +6,30 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Call the toggleAttendeeField function on page load
+        toggleAttendeeField();
+    });
+    
+    function toggleAttendeeField() {
+        var isBookedSelect = document.getElementById("is_booked");
+        var attendeeLabel = document.getElementById("attendeeLabel");
+        var attendeeInput = document.getElementById("attendee_email_list");
+
+        if (isBookedSelect.value === "1") {
+            // Show the Attendee e-mail List field
+            attendeeLabel.style.display = "";
+            attendeeInput.style.display = "";
+            // Apply class to the Attendee e-mail List field
+            attendeeInput.classList.add("narrow-input");
+        } else {
+            // Hide the Attendee e-mail List field
+            attendeeLabel.style.display = "none";
+            attendeeInput.style.display = "none";
+            // Remove class from the Attendee e-mail List field
+            attendeeInput.classList.remove("narrow-input");
+        }
+    }
     function myFunctionHol() {
     	//alert('Hello');
     	var number=document.getElementById("holiday_calendar").value;  
@@ -574,10 +598,8 @@ tr:nth-child(even) {
             <input type="datetime-local" id="slots_end" name="slots_end" value="" class="narrow-input"><br>
 
             <label for="it_email_list"><b>IT Admin e-mail List</b></label>
-            <input type="text" id="it_email_list" name="it_email_list" value="saurabh.gupta940@hcl.com" class="narrow-input"><br>
+            <input type="text" id="it_email_list" name="it_email_list" placeholder="Enter IT Admin e-mail ID(s), separated by commas" class="narrow-input"><br>
 
-            <label for="attendee_email_list"><b>Attendee e-mail List</b></label>
-            <input type="text" id="attendee_email_list" name="attendee_email_list" value="saurabh2204@google.com" class="narrow-input"><br>
 
       		<label for="slot_duration" class="other"><b>Slot Duration(in Minutes)</b></label>
   			<input type="text" id="slot_duration" name="slot_duration" value="60" class="narrow-input"><br>
@@ -614,12 +636,14 @@ tr:nth-child(even) {
     </th:block>
 </select>
 
-			<label for="is_booked"><b>Auto book?</b></label>
-			<select id="is_booked" name="is_booked" class="narrow-input">
-						    <option value="0">No</option>
-			
-			    <option value="1">Yes</option>
-			</select><br>
+            <label for="is_booked"><b>Auto book?</b></label>
+            <select id="is_booked" name="is_booked" class="narrow-input" onchange="toggleAttendeeField()">
+                <option value="0" selected>No</option>
+                <option value="1">Yes</option>
+            </select><br>
+           <label for="attendee_email_list" id="attendeeLabel" style="display: none;"><b>Attendee e-mail List</b></label>
+            <input type="text" id="attendee_email_list" name="attendee_email_list" class="narrow-input" style="display: none;" placeholder="Enter Employee e-mail ID(s), separated by commas"><br>
+
 
 
 <label for="time_zone"><b>Time Zone</b></label>
